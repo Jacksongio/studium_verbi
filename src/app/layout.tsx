@@ -25,6 +25,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Studium Verbi | Premium Patristic Bible Study & RAG Assistant",
   description: "An elegant, Gutenberg-styled Bible reader and advanced theological RAG study companion. Explore scriptures, view patristic commentaries, highlight verses, and seek wisdom with our AI study assistant.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
