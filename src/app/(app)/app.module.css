@@ -1,0 +1,1671 @@
+/* ═══════════════════════════════════════════════
+   Studium Verbi — Refined Design System
+   ═══════════════════════════════════════════════ */
+
+/* ───────── App Shell ───────── */
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: var(--leather-base);
+}
+
+/* ───────── Mobile Header (hidden on desktop) ───────── */
+.mobileHeader {
+  display: none;
+}
+
+.mobileBackdrop {
+  display: none;
+}
+
+/* ───────── Main Layout ───────── */
+.mainLayout {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ───────── Sidebar ───────── */
+.sidebar {
+  width: var(--sidebar-expanded);
+  height: 100%;
+  background: var(--bg-sider);
+  border-right: 1px solid rgba(138, 109, 72, 0.12);
+  display: flex;
+  flex-direction: column;
+  transition: width var(--duration-slow) var(--ease-out);
+  overflow: hidden;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.sidebarCollapsed {
+  width: var(--sidebar-collapsed);
+}
+
+.sidebarHeader {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 56px;
+}
+
+.sidebarCollapsed .sidebarHeader {
+  padding: 1rem 0;
+  justify-content: center;
+}
+
+.sidebarTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--border-gold);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebarCollapsed .sidebarTitle {
+  display: none;
+}
+
+.sidebarToggleBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.sidebarToggleBtn:hover {
+  color: var(--border-gold);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.sidebarContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sidebarCollapsed .sidebarContent {
+  padding: 0.75rem 0;
+  align-items: center;
+}
+
+/* ─── Navigation Links ─── */
+.navSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: all var(--duration-fast);
+}
+
+.navLink:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.navLinkActive {
+  color: var(--border-gold) !important;
+  background: rgba(138, 109, 72, 0.1) !important;
+  font-weight: 600;
+}
+
+/* ─── New Chat Button ─── */
+.newChatBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.newChatBtn:hover {
+  border-color: rgba(138, 109, 72, 0.3);
+  color: var(--border-gold);
+  background: rgba(138, 109, 72, 0.06);
+}
+
+.newChatLabel {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* ─── Collapsed sidebar: icon-only mode ─── */
+.sidebarCollapsed .navLink {
+  justify-content: center;
+  padding: 0.6rem;
+}
+
+.sidebarCollapsed .navLinkLabel {
+  display: none;
+}
+
+.sidebarCollapsed .newChatBtn {
+  border: none;
+  padding: 0.6rem;
+  width: auto;
+}
+
+.sidebarCollapsed .newChatLabel {
+  display: none;
+}
+
+.sidebarCollapsed .chatList {
+  display: none;
+}
+
+/* ─── Chat List ─── */
+.chatList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.chatListItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.chatListItem:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.chatListItemActive {
+  background: rgba(138, 109, 72, 0.1) !important;
+}
+
+.chatListItemInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chatListItemTitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chatListItemActive .chatListItemTitle {
+  color: var(--border-gold);
+  font-weight: 600;
+}
+
+.chatListItemTime {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.savedVersesSection {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sectionHeader {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ─── Sidebar Lists ─── */
+.notesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.savedVersesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.viewAllLink {
+  display: block;
+  text-align: center;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--border-gold);
+  text-decoration: none;
+  padding: 0.4rem 0;
+  margin-top: 0.25rem;
+  transition: opacity var(--duration-fast);
+  opacity: 0.7;
+}
+
+.viewAllLink:hover {
+  opacity: 1;
+}
+
+.emptyStateText {
+  font-family: var(--font-lora), serif;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-style: italic;
+  text-align: center;
+  padding: 1.5rem 0.75rem;
+  line-height: 1.5;
+}
+
+/* ─── Note Card ─── */
+.noteCard {
+  background: var(--bg-sider-surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  transition: all var(--duration-normal) var(--ease-out);
+  animation: fadeInUp var(--duration-slow) var(--ease-out);
+}
+
+.noteCard:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(184, 146, 42, 0.15);
+}
+
+.noteMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.noteTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--border-gold);
+  letter-spacing: 0.02em;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.deleteBtn:hover {
+  color: var(--text-rubric);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.noteQuoteText {
+  font-family: var(--font-lora), serif;
+  font-size: 0.72rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid rgba(184, 146, 42, 0.2);
+}
+
+.noteTextArea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.65rem;
+  font-family: var(--font-lora), serif;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+  resize: vertical;
+  min-height: 48px;
+  outline: none;
+  transition: border-color var(--duration-fast);
+  line-height: 1.5;
+}
+
+.noteTextArea:focus {
+  border-color: rgba(184, 146, 42, 0.4);
+}
+
+.noteTextArea::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Saved Verse Card ─── */
+.savedVerseCard {
+  background: var(--bg-sider-surface);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.7rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.4rem;
+  transition: all var(--duration-normal) var(--ease-out);
+  cursor: pointer;
+}
+
+.savedVerseCard:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(184, 146, 42, 0.15);
+}
+
+.savedVerseInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.savedVerseHeader {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--border-gold);
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.savedVerseBody {
+  font-family: var(--font-lora), serif;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Theme Selector ─── */
+.themePanelCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.themeOptionRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  border: 1px solid transparent;
+}
+
+.themeOptionRow:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.themeOptionActive {
+  background: rgba(184, 146, 42, 0.08) !important;
+  border-color: rgba(184, 146, 42, 0.25) !important;
+}
+
+.themeColorDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+  transition: border-color var(--duration-fast);
+}
+
+.themeOptionActive .themeColorDot {
+  border-color: var(--border-gold);
+  box-shadow: 0 0 0 2px rgba(184, 146, 42, 0.2);
+}
+
+.themeOptionName {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.themeOptionActive .themeOptionName {
+  color: var(--border-gold);
+  font-weight: 600;
+}
+
+/* ─── Profile Footer ─── */
+.sidebarFooter {
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
+}
+
+.profileBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.profileBtn:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.profileLabel {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sidebarCollapsed .profileLabel {
+  display: none;
+}
+
+.sidebarCollapsed .profileBtn {
+  justify-content: center;
+}
+
+.sidebarCollapsed .sidebarFooter {
+  padding: 0.5rem 0;
+}
+
+/* ─── Profile Dropdown ─── */
+.profileDropdown {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0.75rem;
+  right: 0.75rem;
+  background: var(--bg-sider);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: dropdownIn 0.15s var(--ease-out);
+  z-index: 100;
+}
+
+.sidebarCollapsed .profileDropdown {
+  left: 4px;
+  right: auto;
+  min-width: 160px;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.profileDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border-radius: 4px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.76rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  text-align: left;
+  text-decoration: none;
+}
+
+.profileDropdownItem:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.profileDropdownDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 4px 0;
+}
+
+/* ═══════════════════════════════════════════════
+   Sidebar — Bible Navigation (dark theme)
+   ═══════════════════════════════════════════════ */
+
+/* ─── Search ─── */
+.bibleSearchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bibleSearchIcon {
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.bibleSearchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bibleSearchInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Testament Tabs ─── */
+.bibleTestamentTabs {
+  display: flex;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.bibleTestamentTab {
+  flex: 1;
+  padding: 0.45rem;
+  background: transparent;
+  border: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.bibleTestamentTab:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bibleTestamentTabActive {
+  color: var(--border-gold);
+  background: rgba(138, 109, 72, 0.15);
+}
+
+/* ─── Book List ─── */
+.bibleBookList {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 -0.75rem;
+  padding: 0;
+}
+
+.bibleBookGroup {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.bibleBookGroup:last-child {
+  border-bottom: none;
+}
+
+.bibleBookItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 0.85rem;
+  background: transparent;
+  border: none;
+  font-family: var(--font-lora), serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.bibleBookItem:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.bibleBookItemActive {
+  color: var(--border-gold) !important;
+  font-weight: 600;
+  background: rgba(138, 109, 72, 0.1) !important;
+}
+
+.bibleBookName {
+  flex: 1;
+  min-width: 0;
+}
+
+.bibleBookMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.bibleBookChapterCount {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.bibleBookChevron {
+  color: rgba(255, 255, 255, 0.25);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.bibleBookChevronOpen {
+  transform: rotate(180deg);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ─── Inline Chapter Grid ─── */
+.bibleChapterGrid {
+  padding: 0.25rem 0.5rem 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: 3px;
+  animation: bibleGridReveal 0.2s var(--ease-out);
+}
+
+@keyframes bibleGridReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bibleChapterBtn {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.bibleChapterBtn:hover {
+  border-color: rgba(138, 109, 72, 0.4);
+  background: rgba(138, 109, 72, 0.12);
+  color: var(--border-gold);
+}
+
+.bibleChapterBtnActive {
+  background: var(--border-gold) !important;
+  border-color: var(--border-gold) !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════
+   Chat Workspace
+   ═══════════════════════════════════════════════ */
+
+.chatWorkspace {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(184, 146, 42, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(184, 146, 42, 0.02) 0%, transparent 60%);
+}
+
+.chatScrollArea {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chatContentWidth {
+  width: 100%;
+  max-width: 780px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ───────── Welcome Card ───────── */
+.welcomeCard {
+  width: 100%;
+  padding: 3rem 2.5rem 2.5rem;
+  text-align: center;
+  animation: fadeInUp 0.6s var(--ease-out);
+}
+
+.welcomeFoil {
+  color: var(--border-gold);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.welcomeTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.welcomeSubtitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--border-gold);
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.welcomeText {
+  font-family: var(--font-lora), serif;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.welcomeDivider {
+  width: 60px;
+  height: 1px;
+  background: var(--border-gold);
+  margin: 0 auto 2rem;
+  opacity: 0.3;
+}
+
+.suggestedContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.suggestedCard {
+  background: var(--bg-bible);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.15rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.suggestedCard::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--border-gold);
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out);
+}
+
+.suggestedCard:hover {
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.suggestedCard:hover::before {
+  opacity: 1;
+}
+
+.suggestedCard:active {
+  transform: translateY(0);
+}
+
+.suggestedIcon {
+  color: var(--border-gold);
+  margin-top: 1px;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.suggestedLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--border-gold);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.suggestedDesc {
+  font-family: var(--font-lora), serif;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+/* ═══════════════════════════════════════════════
+   Message Bubbles
+   ═══════════════════════════════════════════════ */
+
+.msgContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  animation: fadeInUp var(--duration-slow) var(--ease-out);
+}
+
+.msgHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── User Message ─── */
+.scholarContainer {
+  align-items: flex-end;
+}
+
+.scholarLabel {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.scholarMsg {
+  background: var(--border-gold);
+  color: white;
+  padding: 0.75rem 1.15rem;
+  border-radius: var(--radius-lg);
+  border-bottom-right-radius: 4px;
+  max-width: 72%;
+  font-family: var(--font-lora), serif;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  box-shadow: var(--shadow-sm);
+  animation: slideInRight var(--duration-normal) var(--ease-out);
+}
+
+.msgActions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+  margin-top: 0.2rem;
+}
+
+.msgContainer:hover .msgActions {
+  opacity: 1;
+}
+
+.msgActionBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 3px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all var(--duration-fast);
+  opacity: 0.5;
+}
+
+.msgActionBtn:hover {
+  opacity: 1;
+  color: var(--accent-gold);
+}
+
+/* ─── Inline Edit ─── */
+.scholarEditWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 72%;
+  width: 100%;
+  animation: fadeInUp var(--duration-normal) var(--ease-out);
+}
+
+.scholarEditInput {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: var(--bg-bible);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-lora), serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+}
+
+.scholarEditActions {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.scholarEditSubmit,
+.scholarEditCancel {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.scholarEditSubmit {
+  background: var(--border-gold);
+  border: none;
+  color: white;
+}
+
+.scholarEditSubmit:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.scholarEditSubmit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.scholarEditCancel {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.scholarEditCancel:hover {
+  border-color: var(--border-gold);
+  color: var(--text-primary);
+}
+
+/* ─── AI Message ─── */
+.theologianContainer {
+  align-items: flex-start;
+}
+
+.theologianLabel {
+  color: var(--text-rubric);
+}
+
+.theologianMsgCard {
+  width: 100%;
+  background: var(--bg-bible);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  animation: slideInLeft var(--duration-slow) var(--ease-out);
+  transition: box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.theologianMsgCard:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Drop-cap */
+.dropCapChar {
+  float: left;
+  font-family: var(--font-cinzel), serif;
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 0.82;
+  padding-top: 4px;
+  padding-right: 10px;
+  padding-left: 2px;
+  color: var(--text-rubric);
+}
+
+.theologyBody {
+  font-family: var(--font-lora), Georgia, serif;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--text-primary);
+}
+
+.theologyParagraph {
+  margin-bottom: 0.85rem;
+}
+
+.theologyParagraph:last-child {
+  margin-bottom: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   RAG Accordion (Bibliotheca)
+   ═══════════════════════════════════════════════ */
+
+.ragBibliotheca {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.accordionTrigger {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  letter-spacing: 0.02em;
+}
+
+.accordionTrigger:hover {
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+  background: rgba(184, 146, 42, 0.04);
+}
+
+.accordionIcon {
+  transition: transform var(--duration-normal) var(--ease-out);
+  opacity: 0.5;
+}
+
+.accordionIconRotated {
+  transform: rotate(90deg);
+  opacity: 0.8;
+}
+
+.accordionPanel {
+  animation: fadeInUp var(--duration-normal) var(--ease-out);
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.subSectionTitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  opacity: 0.7;
+}
+
+/* ─── Verse Citation Cards ─── */
+.retrievedVersesGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.verseCitationCard {
+  background: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.verseCitationCard:hover {
+  border-color: rgba(184, 146, 42, 0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.verseCitationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.verseCitationRef {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-rubric);
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.actionBtn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.62rem;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: all var(--duration-fast);
+  letter-spacing: 0.02em;
+}
+
+.actionBtn:hover {
+  background: var(--border-gold);
+  color: white;
+  border-color: var(--border-gold);
+}
+
+.verseCitationText {
+  font-family: var(--font-lora), serif;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+  font-style: italic;
+  opacity: 0.85;
+}
+
+/* ─── Patristic Exegesis Cards ─── */
+.patristicGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.exegesisCard {
+  background: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--text-rubric);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.exegesisCard:hover {
+  border-color: var(--border-subtle);
+  border-left-color: var(--text-rubric);
+  box-shadow: var(--shadow-sm);
+}
+
+.exegesisQuote {
+  font-family: var(--font-lora), serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.exegesisSource {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  text-align: right;
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════════
+   Typing Indicator
+   ═══════════════════════════════════════════════ */
+
+.typingContainer {
+  display: flex;
+  gap: 5px;
+  padding: 0.5rem 0;
+  align-items: center;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  background: var(--border-gold);
+  border-radius: 50%;
+  animation: wave 1.2s infinite ease-in-out;
+  opacity: 0.6;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes wave {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Input Area
+   ═══════════════════════════════════════════════ */
+
+.footerArea {
+  width: 100%;
+  max-width: 780px;
+  padding: 0 1.5rem 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.inputRibbon {
+  display: flex;
+  background: var(--bg-bible);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 4px 5px 4px 20px;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.inputRibbon:focus-within {
+  border-color: var(--border-gold);
+  box-shadow: var(--shadow-lg), 0 0 0 3px rgba(184, 146, 42, 0.08);
+}
+
+.textInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-family: var(--font-lora), serif;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  outline: none;
+  padding: 8px 0;
+}
+
+.textInput::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.submitBtn {
+  background: var(--text-rubric);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.submitBtn:hover {
+  opacity: 0.85;
+  transform: scale(1.04);
+}
+
+.submitBtn:active {
+  transform: scale(0.96);
+}
+
+.submitBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.helperText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-align: center;
+  opacity: 0.4;
+  letter-spacing: 0.01em;
+}
+
+/* ═══════════════════════════════════════════════
+   Modal
+   ═══════════════════════════════════════════════ */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  animation: fadeIn var(--duration-fast) var(--ease-out);
+}
+
+.modalCard {
+  background: var(--bg-bible);
+  border: 1px solid rgba(184, 146, 42, 0.2);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 500px;
+  padding: 2.25rem;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  animation: fadeInUp var(--duration-normal) var(--ease-out);
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  opacity: 0.5;
+}
+
+.modalClose:hover {
+  color: var(--text-rubric);
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.modalRef {
+  font-family: var(--font-cinzel), serif;
+  font-size: 1.15rem;
+  color: var(--text-rubric);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  letter-spacing: 0.04em;
+}
+
+.modalText {
+  font-family: var(--font-lora), serif;
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: var(--text-primary);
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════
+   Responsive
+   ═══════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════
+   Responsive — Tablet
+   ═══════════════════════════════════════════════ */
+@media (max-width: 860px) {
+  .suggestedContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .scholarMsg {
+    max-width: 88%;
+  }
+
+  .chatContentWidth {
+    max-width: 100%;
+  }
+
+  .welcomeCard {
+    padding: 2rem 1.5rem 1.75rem;
+  }
+
+  .welcomeTitle {
+    font-size: 1.6rem;
+  }
+
+  .theologianMsgCard {
+    padding: 1.25rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   Responsive — Mobile
+   ═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Mobile header bar */
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-sider);
+    border-bottom: 1px solid rgba(138, 109, 72, 0.12);
+    flex-shrink: 0;
+    z-index: 60;
+  }
+
+  .mobileMenuBtn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+  }
+
+  .hamburger {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--border-gold);
+    border-radius: 1px;
+  }
+
+  .mobileTitle {
+    font-family: var(--font-cinzel), serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--border-gold);
+    letter-spacing: 0.06em;
+  }
+
+  /* Sidebar becomes a drawer */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 300px !important;
+    z-index: 100;
+    transform: translateX(0);
+    transition: transform var(--duration-slow) var(--ease-out);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .sidebarCollapsed {
+    transform: translateX(-100%);
+    box-shadow: none;
+    width: 300px !important;
+  }
+
+  .sidebarCollapsed .sidebarHeader,
+  .sidebarCollapsed .sidebarContent,
+  .sidebarCollapsed .sidebarFooter {
+    display: flex;
+  }
+
+  .sidebarCollapsed .navLinkLabel,
+  .sidebarCollapsed .newChatLabel,
+  .sidebarCollapsed .profileLabel,
+  .sidebarCollapsed .chatList {
+    display: unset;
+  }
+
+  /* Backdrop */
+  .mobileBackdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    animation: fadeIn var(--duration-fast) var(--ease-out);
+  }
+
+  /* Desktop toggle hidden on mobile */
+  .sidebarToggleBtn {
+    display: none;
+  }
+
+  /* Footer & input adjustments */
+  .footerArea {
+    padding: 0 0.75rem 1rem;
+  }
+
+  .chatScrollArea {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .dropCapChar {
+    font-size: 2.6rem;
+  }
+
+  .scholarEditWrap {
+    max-width: 90%;
+  }
+
+  .scholarMsg {
+    max-width: 85%;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

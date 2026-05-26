@@ -1,0 +1,414 @@
+/* ═══════════════════════════════════════════════
+   Settings Page
+   ═══════════════════════════════════════════════ */
+
+.container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse at 20% 0%, rgba(184, 146, 42, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 100%, rgba(184, 146, 42, 0.02) 0%, transparent 60%);
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2.5rem 1.5rem 6rem;
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.content::after {
+  content: "";
+  display: block;
+  min-height: 1rem;
+  flex-shrink: 0;
+}
+
+.loadingText {
+  font-family: var(--font-lora), serif;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 3rem;
+}
+
+/* ───────── Header ───────── */
+.header {
+  text-align: center;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.headerIcon {
+  color: var(--border-gold);
+  opacity: 0.6;
+  margin-bottom: 0.6rem;
+}
+
+.title {
+  font-family: var(--font-cinzel), serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+}
+
+.subtitle {
+  font-family: var(--font-lora), serif;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ───────── Section ───────── */
+.section {
+  background: var(--bg-bible);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-rubric);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sectionTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ───────── Fields ───────── */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.fieldLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.fieldRow {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.fieldInput {
+  flex: 1;
+  padding: 0.6rem 0.85rem;
+  background: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-lora), serif;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--duration-fast);
+}
+
+.fieldInput:focus {
+  border-color: var(--border-gold);
+}
+
+.fieldInput::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.fieldSaveBtn {
+  padding: 0.6rem 1rem;
+  background: var(--text-rubric);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--duration-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.fieldSaveBtn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.fieldSaveBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fieldStatic {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-lora), serif;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.fieldStaticIcon {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.fieldHint {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  line-height: 1.4;
+}
+
+/* ───────── Password ───────── */
+.passwordFields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.changePasswordBtn {
+  align-self: flex-start;
+  padding: 0.55rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  margin-top: 0.25rem;
+}
+
+.changePasswordBtn:hover:not(:disabled) {
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+}
+
+.changePasswordBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.errorText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  color: var(--text-rubric);
+  padding: 0.4rem 0.65rem;
+  background: rgba(148, 58, 20, 0.06);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--text-rubric);
+}
+
+.successText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  color: #2d6a4f;
+  padding: 0.4rem 0.65rem;
+  background: rgba(45, 106, 79, 0.06);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid #2d6a4f;
+}
+
+/* ───────── Danger Zone ───────── */
+.dangerSection {
+  background: var(--bg-bible);
+  border: 1px solid rgba(148, 58, 20, 0.2);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dangerSection .sectionHeader {
+  color: var(--text-rubric);
+  border-bottom-color: rgba(148, 58, 20, 0.15);
+}
+
+.dangerCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dangerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dangerTitle {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-rubric);
+}
+
+.dangerDesc {
+  font-family: var(--font-lora), serif;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.dangerBtn {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--text-rubric);
+  border-radius: var(--radius-sm);
+  color: var(--text-rubric);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.dangerBtn:hover {
+  background: var(--text-rubric);
+  color: white;
+}
+
+/* ─── Delete Confirmation ─── */
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(148, 58, 20, 0.04);
+  border: 1px solid rgba(148, 58, 20, 0.15);
+  border-radius: var(--radius-sm);
+}
+
+.deleteConfirmText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.deleteConfirmInput {
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-page);
+  border: 1px solid rgba(148, 58, 20, 0.3);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  outline: none;
+  letter-spacing: 0.1em;
+}
+
+.deleteConfirmInput:focus {
+  border-color: var(--text-rubric);
+}
+
+.deleteConfirmActions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
+.deleteConfirmBtn {
+  padding: 0.5rem 1rem;
+  background: var(--text-rubric);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--duration-fast);
+}
+
+.deleteConfirmBtn:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.deleteConfirmBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.deleteConfirmCancel {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.deleteConfirmCancel:hover {
+  border-color: var(--border-gold);
+  color: var(--text-primary);
+}
+
+/* ───────── Responsive ───────── */
+@media (max-width: 640px) {
+  .scrollArea {
+    padding: 1.5rem 1rem 4rem;
+  }
+
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .section,
+  .dangerSection {
+    padding: 1.15rem;
+  }
+
+  .fieldRow {
+    flex-direction: column;
+  }
+}

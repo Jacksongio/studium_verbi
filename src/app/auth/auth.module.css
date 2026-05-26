@@ -1,0 +1,498 @@
+/* ═══════════════════════════════════════════════
+   Auth Page — Split Layout
+   ═══════════════════════════════════════════════ */
+
+.splitLayout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ───────── Left: Brand Panel ───────── */
+.brandPanel {
+  flex: 1;
+  background: var(--bg-sider);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.brandPanel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(138, 109, 72, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 80%, rgba(138, 109, 72, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.brandContent {
+  position: relative;
+  max-width: 360px;
+  text-align: center;
+  animation: fadeInUp 0.7s var(--ease-out);
+}
+
+.brandIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid rgba(138, 109, 72, 0.25);
+  background: rgba(138, 109, 72, 0.08);
+  color: var(--border-gold);
+  margin-bottom: 1.75rem;
+}
+
+.brandTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--border-gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 1.25rem;
+}
+
+.brandDivider {
+  width: 48px;
+  height: 1px;
+  background: var(--border-gold);
+  margin: 0 auto 1.5rem;
+  opacity: 0.3;
+}
+
+.brandMotto {
+  font-family: var(--font-lora), serif;
+  font-size: 1.15rem;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.brandDesc {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.65;
+}
+
+.brandFooter {
+  position: absolute;
+  bottom: 2rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ───────── Right: Form Panel ───────── */
+.formPanel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  background: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(138, 109, 72, 0.04) 0%, transparent 50%);
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 360px;
+  animation: formEnter 0.6s var(--ease-out) 0.15s both;
+}
+
+@keyframes formEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ───────── Back Button ───────── */
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  transition: color var(--duration-fast);
+}
+
+.backBtn:hover {
+  color: var(--accent-gold);
+}
+
+/* ───────── Form Header ───────── */
+.formHeader {
+  margin-bottom: 2rem;
+}
+
+.formTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.4rem;
+}
+
+.formSubtitle {
+  font-family: var(--font-lora), serif;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+
+/* ───────── Form ───────── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper .input {
+  padding-right: 2.5rem;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 0.65rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: opacity var(--duration-fast);
+  border-radius: var(--radius-sm);
+}
+
+.eyeBtn:hover {
+  opacity: 0.7;
+}
+
+.input {
+  width: 100%;
+  padding: 0.72rem 0.9rem;
+  background: var(--bg-bible);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-lora), serif;
+  font-size: 0.92rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all var(--duration-normal) var(--ease-out);
+}
+
+.input:focus {
+  border-color: var(--border-gold);
+  box-shadow: 0 0 0 3px rgba(138, 109, 72, 0.08);
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.4;
+  font-style: italic;
+}
+
+/* ───────── OTP Input ───────── */
+.otpRow {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.otpBox {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-family: var(--font-cinzel), serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-bible);
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: all var(--duration-normal) var(--ease-out);
+  caret-color: var(--border-gold);
+}
+
+.otpBox:focus {
+  border-color: var(--border-gold);
+  box-shadow: 0 0 0 3px rgba(138, 109, 72, 0.12);
+}
+
+/* ───────── Resend Button ───────── */
+.resendBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--border-gold);
+  cursor: pointer;
+  padding: 0.3rem 0;
+  align-self: center;
+  transition: opacity var(--duration-fast);
+}
+
+.resendBtn:hover:not(:disabled) {
+  opacity: 0.7;
+}
+
+.resendBtn:disabled {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ───────── Messages ───────── */
+.success {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.76rem;
+  color: #2d6a4f;
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  background: rgba(45, 106, 79, 0.06);
+  border: 1px solid rgba(45, 106, 79, 0.12);
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+.error {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.76rem;
+  color: var(--text-rubric);
+  text-align: center;
+  padding: 0.6rem 0.75rem;
+  background: rgba(148, 58, 20, 0.05);
+  border: 1px solid rgba(148, 58, 20, 0.1);
+  border-radius: var(--radius-sm);
+  line-height: 1.4;
+}
+
+/* ───────── Submit Button ───────── */
+.submitBtn {
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-gold);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover {
+  background: var(--border-gold);
+  box-shadow: 0 4px 12px rgba(138, 109, 72, 0.2);
+}
+
+.submitBtn:active {
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ───────── Forgot Password ───────── */
+.forgotBtn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.78rem;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 1rem;
+  transition: color var(--duration-fast);
+}
+
+.forgotBtn:hover {
+  color: var(--accent-gold);
+}
+
+/* ───────── Toggle Area ───────── */
+.toggleArea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.toggleText {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: var(--accent-gold);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--duration-fast);
+  padding: 0;
+}
+
+.toggleBtn:hover {
+  color: var(--border-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ───────── Loading ───────── */
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+}
+
+.loadingPulse {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--border-gold);
+  opacity: 0.3;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ───────── Responsive ───────── */
+@media (max-width: 768px) {
+  .splitLayout {
+    flex-direction: column;
+  }
+
+  .brandPanel {
+    padding: 2.5rem 2rem 2rem;
+    min-height: auto;
+  }
+
+  .brandContent {
+    max-width: 100%;
+  }
+
+  .brandTitle {
+    font-size: 1.5rem;
+  }
+
+  .brandMotto {
+    font-size: 1rem;
+  }
+
+  .brandDesc {
+    display: none;
+  }
+
+  .brandFooter {
+    display: none;
+  }
+
+  .formPanel {
+    padding: 2rem 1.5rem 3rem;
+  }
+}
