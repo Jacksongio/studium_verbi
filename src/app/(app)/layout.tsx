@@ -78,7 +78,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 onClick={() => setSidebarOpen(false)}
               />
             )}
-            <Sidebar open={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} onNavigate={() => setSidebarOpen(false)} />
+            <Sidebar open={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} onNavigate={() => { if (window.innerWidth <= 768) setSidebarOpen(false); }} />
             {children}
           </div>
         </div>
