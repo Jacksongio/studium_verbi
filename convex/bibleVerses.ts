@@ -60,6 +60,21 @@ export const hasVerses = internalQuery({
   },
 });
 
+export const getVerseByRef = internalQuery({
+  args: { book: v.string(), chapter: v.number(), verse: v.number() },
+  handler: async (ctx, args) => {
+    return ctx.db
+      .query("bibleVerses")
+      .withIndex("by_book_chapter_verse", (q) =>
+        q
+          .eq("book", args.book)
+          .eq("chapter", args.chapter)
+          .eq("verse", args.verse)
+      )
+      .unique();
+  },
+});
+
 export const getChapterVerses = query({
   args: { book: v.string(), chapter: v.number() },
   handler: async (ctx, args) => {
