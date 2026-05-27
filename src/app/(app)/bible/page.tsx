@@ -1,15 +1,21 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, NotebookPen } from "lucide-react";
 import { useBibleContext } from "../components/BibleContext";
 import styles from "./bible.module.css";
 
 export default function BiblePage() {
   const { location, navigate, prev, next } = useBibleContext();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [notebookOpen, setNotebookOpen] = useState(false);
+  const [localDraft, setLocalDraft] = useState<{
+    key: string;
+    content: string;
+  } | null>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const verses = useQuery(
     api.bibleVerses.getChapterVerses,
@@ -19,6 +25,55 @@ export default function BiblePage() {
   const savedVerses = useQuery(api.savedVerses.list) ?? [];
   const saveVerse = useMutation(api.savedVerses.save);
   const removeVerse = useMutation(api.savedVerses.remove);
+
+  const note = useQuery(
+    api.bibleNotes.get,
+    location ? { book: location.book.name, chapter: location.chapter } : "skip"
+  );
+  const saveNote = useMutation(api.bibleNotes.save);
+
+  const locationKey = location
+    ? `${location.book.name}:${location.chapter}`
+    : "";
+
+  // Use local draft while user is typing for the current chapter;
+  // fall back to the DB value otherwise.
+  const draft =
+    localDraft && localDraft.key === locationKey
+      ? localDraft.content
+      : (note?.content ?? "");
+
+  // Auto-save with debounce
+  const scheduleSave = useCallback(
+    (content: string) => {
+      if (!location) return;
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = setTimeout(() => {
+        saveNote({
+          book: location.book.name,
+          chapter: location.chapter,
+          content,
+        }).catch(() => {});
+      }, 800);
+    },
+    [location, saveNote]
+  );
+
+  const handleNoteChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const val = e.target.value;
+      setLocalDraft({ key: locationKey, content: val });
+      scheduleSave(val);
+    },
+    [locationKey, scheduleSave]
+  );
+
+  // Flush pending save on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, []);
 
   // Build a set of saved verse keys for fast lookup
   const savedSet = new Set(
@@ -50,38 +105,49 @@ export default function BiblePage() {
             <h1 className={styles.readingRef}>
               {location.book.name} {location.chapter}
             </h1>
-            <div className={styles.chapterNav}>
+            <div className={styles.headerActions}>
               <button
-                className={styles.chapterNavBtn}
-                onClick={() => prev && navigate(prev)}
-                disabled={!prev}
-                aria-label="Previous chapter"
-                title={
-                  prev
-                    ? `${prev.book.name} ${prev.chapter}`
-                    : "Beginning of Bible"
-                }
+                className={`${styles.notebookToggle} ${notebookOpen ? styles.notebookToggleActive : ""}`}
+                onClick={() => setNotebookOpen(!notebookOpen)}
+                aria-label={notebookOpen ? "Close notebook" : "Open notebook"}
+                title={notebookOpen ? "Close notebook" : "Open notebook"}
               >
-                <ChevronLeft size={16} />
+                <NotebookPen size={16} />
               </button>
-              <span className={styles.chapterNavLabel}>
-                {location.chapter} / {location.book.chapters}
-              </span>
-              <button
-                className={styles.chapterNavBtn}
-                onClick={() => next && navigate(next)}
-                disabled={!next}
-                aria-label="Next chapter"
-                title={
-                  next
-                    ? `${next.book.name} ${next.chapter}`
-                    : "End of Bible"
-                }
-              >
-                <ChevronRight size={16} />
-              </button>
+              <div className={styles.chapterNav}>
+                <button
+                  className={styles.chapterNavBtn}
+                  onClick={() => prev && navigate(prev)}
+                  disabled={!prev}
+                  aria-label="Previous chapter"
+                  title={
+                    prev
+                      ? `${prev.book.name} ${prev.chapter}`
+                      : "Beginning of Bible"
+                  }
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className={styles.chapterNavLabel}>
+                  {location.chapter} / {location.book.chapters}
+                </span>
+                <button
+                  className={styles.chapterNavBtn}
+                  onClick={() => next && navigate(next)}
+                  disabled={!next}
+                  aria-label="Next chapter"
+                  title={
+                    next
+                      ? `${next.book.name} ${next.chapter}`
+                      : "End of Bible"
+                  }
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
             </div>
           </div>
+          <div className={styles.readingBody}>
           <div className={styles.readingScroll} ref={scrollRef}>
             {verses === undefined ? (
               <p className={styles.loadingText}>Loading...</p>
@@ -153,6 +219,27 @@ export default function BiblePage() {
                 </div>
               </div>
             )}
+          </div>
+          {notebookOpen && (
+            <aside className={styles.notebookPanel}>
+              <div className={styles.notebookHeader}>
+                <h3 className={styles.notebookTitle}>Notes</h3>
+                <span className={styles.notebookRef}>
+                  {location.book.name} {location.chapter}
+                </span>
+              </div>
+              <div className={styles.notebookBody}>
+                <div className={styles.notebookMarginLine} />
+                <textarea
+                  className={styles.notebookTextarea}
+                  value={draft}
+                  onChange={handleNoteChange}
+                  placeholder="Write your notes for this chapter..."
+                  spellCheck
+                />
+              </div>
+            </aside>
+          )}
           </div>
         </>
       ) : (

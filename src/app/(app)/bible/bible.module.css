@@ -69,6 +69,45 @@
   cursor: not-allowed;
 }
 
+/* ─── Header Actions ─── */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.notebookToggle {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast);
+}
+
+.notebookToggle:hover {
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+}
+
+.notebookToggleActive {
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+  background: rgba(138, 109, 72, 0.08);
+}
+
+/* ─── Reading Body (scroll + notebook side-by-side) ─── */
+.readingBody {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
 /* ─── Scroll & Content ─── */
 .readingScroll {
   flex: 1;
@@ -171,6 +210,103 @@
   font-weight: 600;
 }
 
+/* ───────── Notebook Panel ───────── */
+.notebookPanel {
+  --nb-line-height: 1.75rem;
+  --nb-margin-left: 2.5rem;
+  --nb-rule-color: rgba(160, 190, 220, 0.35);
+  --nb-margin-color: rgba(200, 80, 80, 0.45);
+  --nb-paper: #fdf8ef;
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-subtle);
+  background: var(--nb-paper);
+}
+
+.notebookHeader {
+  padding: 0.7rem 0.85rem 0.7rem var(--nb-margin-left);
+  border-bottom: 1px solid var(--nb-rule-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  background: var(--nb-paper);
+  position: relative;
+}
+
+.notebookHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--nb-margin-left) - 0.75rem);
+  width: 1px;
+  background: var(--nb-margin-color);
+}
+
+.notebookTitle {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.06em;
+}
+
+.notebookRef {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.notebookBody {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Red vertical margin line */
+.notebookMarginLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--nb-margin-left) - 0.75rem);
+  width: 1px;
+  background: var(--nb-margin-color);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.notebookTextarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  padding: calc(var(--nb-line-height) - 1px) 0.85rem 1rem var(--nb-margin-left);
+  font-family: var(--font-lora), serif;
+  font-size: 0.92rem;
+  line-height: var(--nb-line-height);
+  color: var(--text-primary);
+  background: transparent;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent calc(var(--nb-line-height) - 1px),
+    var(--nb-rule-color) calc(var(--nb-line-height) - 1px),
+    var(--nb-rule-color) var(--nb-line-height)
+  );
+  background-size: 100% var(--nb-line-height);
+  background-attachment: local;
+}
+
+.notebookTextarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.35;
+  font-style: italic;
+}
+
 /* ───────── Empty / Loading States ───────── */
 .emptyReading {
   flex: 1;
@@ -225,6 +361,10 @@
   .readingRef {
     font-size: 1rem;
   }
+
+  .notebookPanel {
+    width: 260px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -234,5 +374,16 @@
 
   .pageNav {
     margin-top: 2rem;
+  }
+
+  .readingBody {
+    flex-direction: column;
+  }
+
+  .notebookPanel {
+    width: 100%;
+    max-height: 40vh;
+    border-left: none;
+    border-top: 1px solid var(--border-subtle);
   }
 }

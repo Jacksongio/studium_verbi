@@ -101,6 +101,15 @@ const schema = defineSchema({
     lastBibleChapter: v.optional(v.number()),
   }).index("by_userId", ["userId"]),
 
+  bible_notes: defineTable({
+    userId: v.string(),
+    book: v.string(),
+    chapter: v.number(),
+    content: v.string(),
+    updatedAt: v.number(),
+  })
+    .index("by_userId_and_book_chapter", ["userId", "book", "chapter"]),
+
   bibleVerses: defineTable({
     book: v.string(),
     chapter: v.number(),

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useQuery, useMutation } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import {
@@ -19,7 +19,6 @@ import {
   Search,
   Bookmark,
   GraduationCap,
-  X,
 } from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
 import { useChatContext } from "./ChatContext";
@@ -51,17 +50,13 @@ export default function Sidebar({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const isBiblePage = pathname === "/bible";
   const isSavedPage = pathname === "/saved";
   const { signOut } = useAuthActions();
   const chats = useQuery(api.chats.listChats) ?? [];
   const deleteChat = useMutation(api.chats.deleteChat);
-  const savedVerses = useQuery(api.savedVerses.list) ?? [];
-  const removeSavedVerse = useMutation(api.savedVerses.removeById);
   const studyPlans = useQuery(api.studyPlans.listPlans) ?? [];
   const { activeChatId, setActiveChatId } = useChatContext();
-  const bible = useBibleContext();
   const {
     location,
     testament,
@@ -71,7 +66,7 @@ export default function Sidebar({
     selectChapter,
     setTestament,
     setSearchQuery,
-  } = bible;
+  } = useBibleContext();
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const bookListRef = useRef<HTMLDivElement>(null);
@@ -341,57 +336,6 @@ export default function Sidebar({
           </>
         )}
 
-        {/* ── Saved Verses (all pages) ── */}
-        {open && savedVerses.length > 0 && (
-          <div className={styles.savedVersesSection}>
-            <div className={styles.sectionHeader}>
-              <Bookmark size={11} />
-              Saved Verses
-            </div>
-            <div className={styles.savedVersesList}>
-              {savedVerses.slice(0, 3).map((sv) => (
-                <div
-                  key={sv._id}
-                  className={styles.savedVerseCard}
-                  onClick={() => {
-                    const book = BIBLE_BOOKS.find((b) => b.name === sv.book);
-                    if (book) {
-                      bible.navigate({ book, chapter: sv.chapter });
-                      if (!isBiblePage) {
-                        router.push("/bible");
-                      }
-                    }
-                    onNavigate?.();
-                  }}
-                >
-                  <div className={styles.savedVerseInfo}>
-                    <span className={styles.savedVerseHeader}>
-                      {sv.book} {sv.chapter}:{sv.verse}
-                    </span>
-                    <span className={styles.savedVerseBody}>
-                      {sv.text}
-                    </span>
-                  </div>
-                  <button
-                    className={styles.deleteBtn}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      removeSavedVerse({ id: sv._id }).catch(() => {});
-                    }}
-                    title="Remove bookmark"
-                  >
-                    <X size={11} />
-                  </button>
-                </div>
-              ))}
-            </div>
-            {savedVerses.length > 3 && (
-              <Link href="/saved" className={styles.viewAllLink}>
-                View all {savedVerses.length} saved verses
-              </Link>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Profile footer */}

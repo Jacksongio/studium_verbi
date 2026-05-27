@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as bibleNotes from "../bibleNotes.js";
 import type * as bibleVerses from "../bibleVerses.js";
 import type * as chats from "../chats.js";
 import type * as http from "../http.js";
@@ -29,6 +30,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  bibleNotes: typeof bibleNotes;
   bibleVerses: typeof bibleVerses;
   chats: typeof chats;
   http: typeof http;
