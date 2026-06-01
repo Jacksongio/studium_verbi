@@ -1,5 +1,5 @@
 /**
- * Seed the KJV Bible into the Convex bibleVerses table with OpenAI embeddings.
+ * Seed the WEB (World English Bible) into the Convex bibleVerses table with OpenAI embeddings.
  *
  * Usage:
  *   OPENAI_API_KEY=sk-... SEED_SECRET=xxx npx tsx scripts/seed-bible.ts
@@ -26,35 +26,53 @@ if (!CONVEX_URL) throw new Error("Missing NEXT_PUBLIC_CONVEX_URL");
 
 const convex = new ConvexHttpClient(CONVEX_URL);
 
-// The 66 books of the KJV in canonical order
+// The 66 books in canonical order — filenames in the TehShrike/world-english-bible repo
 const BOOKS = [
-  "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-  "Joshua", "Judges", "Ruth", "1Samuel", "2Samuel",
-  "1Kings", "2Kings", "1Chronicles", "2Chronicles", "Ezra",
-  "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
-  "Ecclesiastes", "SongofSolomon", "Isaiah", "Jeremiah", "Lamentations",
-  "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
-  "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk",
-  "Zephaniah", "Haggai", "Zechariah", "Malachi",
-  "Matthew", "Mark", "Luke", "John", "Acts",
-  "Romans", "1Corinthians", "2Corinthians", "Galatians", "Ephesians",
-  "Philippians", "Colossians", "1Thessalonians", "2Thessalonians",
-  "1Timothy", "2Timothy", "Titus", "Philemon", "Hebrews",
-  "James", "1Peter", "2Peter", "1John", "2John", "3John",
-  "Jude", "Revelation",
+  "genesis", "exodus", "leviticus", "numbers", "deuteronomy",
+  "joshua", "judges", "ruth", "1samuel", "2samuel",
+  "1kings", "2kings", "1chronicles", "2chronicles", "ezra",
+  "nehemiah", "esther", "job", "psalms", "proverbs",
+  "ecclesiastes", "songofsolomon", "isaiah", "jeremiah", "lamentations",
+  "ezekiel", "daniel", "hosea", "joel", "amos",
+  "obadiah", "jonah", "micah", "nahum", "habakkuk",
+  "zephaniah", "haggai", "zechariah", "malachi",
+  "matthew", "mark", "luke", "john", "acts",
+  "romans", "1corinthians", "2corinthians", "galatians", "ephesians",
+  "philippians", "colossians", "1thessalonians", "2thessalonians",
+  "1timothy", "2timothy", "titus", "philemon", "hebrews",
+  "james", "1peter", "2peter", "1john", "2john", "3john",
+  "jude", "revelation",
 ];
 
-// Friendly display names for books (for the embedding context and DB storage)
+// Map lowercase filenames to display names for DB storage
 const DISPLAY_NAMES: Record<string, string> = {
-  "1Samuel": "1 Samuel", "2Samuel": "2 Samuel",
-  "1Kings": "1 Kings", "2Kings": "2 Kings",
-  "1Chronicles": "1 Chronicles", "2Chronicles": "2 Chronicles",
-  "SongofSolomon": "Song of Solomon",
-  "1Corinthians": "1 Corinthians", "2Corinthians": "2 Corinthians",
-  "1Thessalonians": "1 Thessalonians", "2Thessalonians": "2 Thessalonians",
-  "1Timothy": "1 Timothy", "2Timothy": "2 Timothy",
-  "1Peter": "1 Peter", "2Peter": "2 Peter",
-  "1John": "1 John", "2John": "2 John", "3John": "3 John",
+  "genesis": "Genesis", "exodus": "Exodus", "leviticus": "Leviticus",
+  "numbers": "Numbers", "deuteronomy": "Deuteronomy", "joshua": "Joshua",
+  "judges": "Judges", "ruth": "Ruth",
+  "1samuel": "1 Samuel", "2samuel": "2 Samuel",
+  "1kings": "1 Kings", "2kings": "2 Kings",
+  "1chronicles": "1 Chronicles", "2chronicles": "2 Chronicles",
+  "ezra": "Ezra", "nehemiah": "Nehemiah", "esther": "Esther",
+  "job": "Job", "psalms": "Psalms", "proverbs": "Proverbs",
+  "ecclesiastes": "Ecclesiastes", "songofsolomon": "Song of Solomon",
+  "isaiah": "Isaiah", "jeremiah": "Jeremiah", "lamentations": "Lamentations",
+  "ezekiel": "Ezekiel", "daniel": "Daniel", "hosea": "Hosea",
+  "joel": "Joel", "amos": "Amos", "obadiah": "Obadiah",
+  "jonah": "Jonah", "micah": "Micah", "nahum": "Nahum",
+  "habakkuk": "Habakkuk", "zephaniah": "Zephaniah", "haggai": "Haggai",
+  "zechariah": "Zechariah", "malachi": "Malachi",
+  "matthew": "Matthew", "mark": "Mark", "luke": "Luke", "john": "John",
+  "acts": "Acts", "romans": "Romans",
+  "1corinthians": "1 Corinthians", "2corinthians": "2 Corinthians",
+  "galatians": "Galatians", "ephesians": "Ephesians",
+  "philippians": "Philippians", "colossians": "Colossians",
+  "1thessalonians": "1 Thessalonians", "2thessalonians": "2 Thessalonians",
+  "1timothy": "1 Timothy", "2timothy": "2 Timothy",
+  "titus": "Titus", "philemon": "Philemon", "hebrews": "Hebrews",
+  "james": "James",
+  "1peter": "1 Peter", "2peter": "2 Peter",
+  "1john": "1 John", "2john": "2 John", "3john": "3 John",
+  "jude": "Jude", "revelation": "Revelation",
 };
 
 interface RawVerse {
@@ -65,10 +83,43 @@ interface RawVerse {
 }
 
 async function fetchBookJson(bookFileName: string): Promise<any> {
-  const url = `https://raw.githubusercontent.com/aruljohn/Bible-kjv/master/${bookFileName}.json`;
+  const url = `https://raw.githubusercontent.com/TehShrike/world-english-bible/master/json/${bookFileName}.json`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch ${bookFileName}: ${res.status}`);
   return res.json();
+}
+
+/**
+ * Parse the WEB JSON format into a flat list of verses.
+ * The WEB repo stores each book as a flat array of items with types like
+ * "paragraph text", "line text", etc. Poetry books (Psalms, Proverbs, etc.)
+ * split a single verse across multiple "line text" entries, so we concatenate
+ * entries that share the same chapter+verse number.
+ */
+function parseWebBook(items: any[], displayName: string): RawVerse[] {
+  const verseMap = new Map<string, RawVerse>();
+
+  for (const item of items) {
+    if (!("verseNumber" in item) || !("value" in item)) continue;
+
+    const ch = Number(item.chapterNumber);
+    const vs = Number(item.verseNumber);
+    const key = `${ch}:${vs}`;
+    const text = String(item.value).trim();
+    if (!text) continue;
+
+    const existing = verseMap.get(key);
+    if (existing) {
+      existing.text += " " + text;
+    } else {
+      verseMap.set(key, { book: displayName, chapter: ch, verse: vs, text });
+    }
+  }
+
+  // Return in canonical order
+  return Array.from(verseMap.values()).sort(
+    (a, b) => a.chapter - b.chapter || a.verse - b.verse
+  );
 }
 
 async function generateEmbeddings(texts: string[]): Promise<number[][]> {
@@ -101,7 +152,7 @@ async function sleep(ms: number) {
 }
 
 async function main() {
-  console.log("🔍 Starting KJV Bible seeding...\n");
+  console.log("🔍 Starting WEB (World English Bible) seeding...\n");
 
   // Step 1: Download all books and collect verses
   const allVerses: RawVerse[] = [];
@@ -112,20 +163,11 @@ async function main() {
 
     try {
       const bookData = await fetchBookJson(bookFile);
-      const chapters: any[] = bookData.chapters;
+      const verses = parseWebBook(bookData, displayName);
+      allVerses.push(...verses);
 
-      for (const ch of chapters) {
-        for (const v of ch.verses) {
-          allVerses.push({
-            book: displayName,
-            chapter: Number(ch.chapter),
-            verse: Number(v.verse),
-            text: String(v.text),
-          });
-        }
-      }
-
-      console.log(` ✓ (${chapters.length} chapters)`);
+      const chapterCount = new Set(verses.map((v) => v.chapter)).size;
+      console.log(` ✓ (${chapterCount} chapters, ${verses.length} verses)`);
     } catch (err: any) {
       console.log(` ✗ ${err.message}`);
     }

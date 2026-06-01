@@ -178,7 +178,7 @@ export const studyQuery = action({
       .map((v: any) => `${v.book} ${v.chapter}:${v.verse} — "${v.text}"`)
       .join("\n");
 
-    const systemPrompt = `You are a scholarly theological assistant specializing in KJV Bible study and systematic theology. Your role is to provide deep, reverent analysis grounded in scripture.
+    const systemPrompt = `You are a scholarly theological assistant specializing in WEB (World English Bible) study and systematic theology. Your role is to provide deep, reverent analysis grounded in scripture.
 
 Guidelines:
 - ONLY cite verses from the provided list below. Do NOT cite any verse that is not in the list, even if you know it from memory. If a verse you want to reference is not in the list, describe the concept without giving a specific reference.
@@ -190,7 +190,7 @@ Guidelines:
 
     const userPrompt = `The scholar asks: "${args.query}"
 
-Here are the ONLY KJV passages you may cite (do not cite any others):
+Here are the ONLY WEB passages you may cite (do not cite any others):
 ${verseCitations}
 
 Provide a thorough theological analysis of the scholar's question. Cite only the passages that are directly relevant — you do not need to use all of them. Do not reference any verse not listed above.`;
