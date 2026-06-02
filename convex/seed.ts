@@ -2,6 +2,17 @@ import { action } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
+export const clearAllVerses = action({
+  args: { secret: v.string() },
+  handler: async (ctx, args) => {
+    if (args.secret !== process.env.SEED_SECRET) {
+      throw new Error("Unauthorized");
+    }
+    await ctx.runMutation(internal.bibleVerses.clearVerseBatch, {});
+    return { status: "clearing started" };
+  },
+});
+
 export const seedBatch = action({
   args: {
     secret: v.string(),

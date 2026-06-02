@@ -1,4 +1,5 @@
 import { query, internalQuery, internalMutation } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { v } from "convex/values";
 
 export const insertVerseBatch = internalMutation({
@@ -84,5 +85,21 @@ export const getChapterVerses = query({
         q.eq("book", args.book).eq("chapter", args.chapter)
       )
       .take(200);
+  },
+});
+
+export const clearVerseBatch = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const batch = await ctx.db.query("bibleVerses").take(500);
+    if (batch.length === 0) {
+      console.log("All verses cleared.");
+      return;
+    }
+    for (const doc of batch) {
+      await ctx.db.delete(doc._id);
+    }
+    console.log(`Deleted ${batch.length} verses, scheduling next batch...`);
+    await ctx.scheduler.runAfter(0, internal.bibleVerses.clearVerseBatch, {});
   },
 });
