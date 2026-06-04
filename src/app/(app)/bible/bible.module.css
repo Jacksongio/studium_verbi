@@ -367,6 +367,32 @@
   }
 }
 
+/* ─── Notebook close button (visible on mobile only) ─── */
+.notebookClose {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast);
+  flex-shrink: 0;
+}
+
+.notebookClose:hover {
+  border-color: var(--border-gold);
+  color: var(--accent-gold);
+}
+
+/* ─── Mobile overlay backdrop ─── */
+.notebookOverlay {
+  display: none;
+}
+
 @media (max-width: 640px) {
   .readingScroll {
     padding: 1.25rem 1rem 1rem;
@@ -377,13 +403,42 @@
   }
 
   .readingBody {
-    flex-direction: column;
+    position: relative;
   }
 
   .notebookPanel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    max-height: 40vh;
+    height: 70vh;
+    max-height: none;
     border-left: none;
     border-top: 1px solid var(--border-subtle);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    z-index: 20;
+  }
+
+  .notebookClose {
+    display: flex;
+  }
+
+  .notebookOverlay {
+    display: block;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 19;
+  }
+
+  .notebookHeader {
+    padding: 0.85rem 1rem 0.85rem var(--nb-margin-left);
+    gap: 0.5rem;
+  }
+
+  .notebookTextarea {
+    font-size: 1rem;
   }
 }

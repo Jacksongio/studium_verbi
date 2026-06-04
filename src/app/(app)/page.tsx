@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import {
   Send,
@@ -151,7 +151,7 @@ export default function StudyPage() {
     }
   };
 
-  const renderTextWithDropCap = (text: string) => {
+  const renderTextWithDropCap = useCallback((text: string) => {
     const paragraphs = text.split("\n\n");
     if (paragraphs.length === 0) return null;
 
@@ -197,7 +197,7 @@ export default function StudyPage() {
         ))}
       </div>
     );
-  };
+  }, []);
 
   return (
     <section className={styles.chatWorkspace}>

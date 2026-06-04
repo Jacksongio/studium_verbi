@@ -6,6 +6,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
   useRef,
   ReactNode,
 } from "react";
@@ -199,22 +200,35 @@ export function BibleProvider({ children }: { children: ReactNode }) {
     [navigate]
   );
 
+  const contextValue = useMemo(
+    () => ({
+      location,
+      testament,
+      expandedBook,
+      searchQuery,
+      navigate,
+      selectBook,
+      selectChapter,
+      setTestament,
+      setSearchQuery,
+      prev,
+      next,
+    }),
+    [
+      location,
+      testament,
+      expandedBook,
+      searchQuery,
+      navigate,
+      selectBook,
+      selectChapter,
+      prev,
+      next,
+    ]
+  );
+
   return (
-    <BibleContext.Provider
-      value={{
-        location,
-        testament,
-        expandedBook,
-        searchQuery,
-        navigate,
-        selectBook,
-        selectChapter,
-        setTestament,
-        setSearchQuery,
-        prev,
-        next,
-      }}
-    >
+    <BibleContext.Provider value={contextValue}>
       {children}
     </BibleContext.Provider>
   );

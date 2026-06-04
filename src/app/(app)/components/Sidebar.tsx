@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useQuery, useMutation } from "convex/react";
 import { useAuthActions } from "@convex-dev/auth/react";
 import {
   BookOpen,
+  BookText,
   MessageSquare,
   Plus,
   Trash2,
@@ -52,6 +53,7 @@ export default function Sidebar({
   const pathname = usePathname();
   const isBiblePage = pathname === "/bible";
   const isSavedPage = pathname === "/saved";
+  const isCatechismPage = pathname === "/catechism";
   const { signOut } = useAuthActions();
   const chats = useQuery(api.chats.listChats) ?? [];
   const deleteChat = useMutation(api.chats.deleteChat);
@@ -72,12 +74,25 @@ export default function Sidebar({
   const bookListRef = useRef<HTMLDivElement>(null);
   const activeBookRef = useRef<HTMLDivElement>(null);
 
-  const filteredBooks = BIBLE_BOOKS.filter((b) => {
-    if (searchQuery) {
-      return b.name.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredBooks = useMemo(
+    () =>
+      BIBLE_BOOKS.filter((b) => {
+        if (searchQuery) {
+          return b.name.toLowerCase().includes(searchQuery.toLowerCase());
+        }
+        return b.testament === testament;
+      }),
+    [searchQuery, testament]
+  );
+
+  // Pre-compute chapter number arrays to avoid Array.from() in render loop
+  const chapterArrays = useMemo(() => {
+    const map: Record<string, number[]> = {};
+    for (const book of BIBLE_BOOKS) {
+      map[book.name] = Array.from({ length: book.chapters }, (_, i) => i + 1);
     }
-    return b.testament === testament;
-  });
+    return map;
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -158,6 +173,15 @@ export default function Sidebar({
           >
             <Bookmark size={16} />
             <span className={styles.navLinkLabel}>Saved</span>
+          </Link>
+          <Link
+            href="/catechism"
+            className={`${styles.navLink} ${isCatechismPage ? styles.navLinkActive : ""}`}
+            title="Luther's Small Catechism"
+            onClick={onNavigate}
+          >
+            <BookText size={16} />
+            <span className={styles.navLinkLabel}>Catechism</span>
           </Link>
         </nav>
 
@@ -276,10 +300,7 @@ export default function Sidebar({
 
                     {isExpanded && (
                       <div className={styles.bibleChapterGrid}>
-                        {Array.from(
-                          { length: book.chapters },
-                          (_, i) => i + 1
-                        ).map((ch) => (
+                        {chapterArrays[book.name].map((ch) => (
                           <button
                             key={ch}
                             className={`${styles.bibleChapterBtn} ${location?.book.name === book.name && location?.chapter === ch ? styles.bibleChapterBtnActive : ""}`}

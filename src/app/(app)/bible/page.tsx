@@ -3,7 +3,7 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { BookOpen, ChevronLeft, ChevronRight, NotebookPen } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, NotebookPen, X } from "lucide-react";
 import { useBibleContext } from "../components/BibleContext";
 import styles from "./bible.module.css";
 
@@ -221,12 +221,24 @@ export default function BiblePage() {
             )}
           </div>
           {notebookOpen && (
+            <>
+            <div
+              className={styles.notebookOverlay}
+              onClick={() => setNotebookOpen(false)}
+            />
             <aside className={styles.notebookPanel}>
               <div className={styles.notebookHeader}>
                 <h3 className={styles.notebookTitle}>Notes</h3>
                 <span className={styles.notebookRef}>
                   {location.book.name} {location.chapter}
                 </span>
+                <button
+                  className={styles.notebookClose}
+                  onClick={() => setNotebookOpen(false)}
+                  aria-label="Close notebook"
+                >
+                  <X size={14} />
+                </button>
               </div>
               <div className={styles.notebookBody}>
                 <div className={styles.notebookMarginLine} />
@@ -239,6 +251,7 @@ export default function BiblePage() {
                 />
               </div>
             </aside>
+            </>
           )}
           </div>
         </>
