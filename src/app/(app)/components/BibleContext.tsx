@@ -20,11 +20,13 @@ export interface BibleBook {
 }
 
 export const BIBLE_BOOKS: BibleBook[] = [
+  // ── Pentateuch ──
   { name: "Genesis", chapters: 50, testament: "OT" },
   { name: "Exodus", chapters: 40, testament: "OT" },
   { name: "Leviticus", chapters: 27, testament: "OT" },
   { name: "Numbers", chapters: 36, testament: "OT" },
   { name: "Deuteronomy", chapters: 34, testament: "OT" },
+  // ── Historical ──
   { name: "Joshua", chapters: 24, testament: "OT" },
   { name: "Judges", chapters: 21, testament: "OT" },
   { name: "Ruth", chapters: 4, testament: "OT" },
@@ -36,17 +38,26 @@ export const BIBLE_BOOKS: BibleBook[] = [
   { name: "2 Chronicles", chapters: 36, testament: "OT" },
   { name: "Ezra", chapters: 10, testament: "OT" },
   { name: "Nehemiah", chapters: 13, testament: "OT" },
-  { name: "Esther", chapters: 10, testament: "OT" },
+  { name: "Tobit", chapters: 14, testament: "OT" },
+  { name: "Judith", chapters: 16, testament: "OT" },
+  { name: "Esther", chapters: 16, testament: "OT" },
+  { name: "1 Maccabees", chapters: 16, testament: "OT" },
+  { name: "2 Maccabees", chapters: 15, testament: "OT" },
+  // ── Wisdom ──
   { name: "Job", chapters: 42, testament: "OT" },
   { name: "Psalms", chapters: 150, testament: "OT" },
   { name: "Proverbs", chapters: 31, testament: "OT" },
   { name: "Ecclesiastes", chapters: 12, testament: "OT" },
   { name: "Song of Solomon", chapters: 8, testament: "OT" },
+  { name: "Wisdom", chapters: 19, testament: "OT" },
+  { name: "Sirach", chapters: 51, testament: "OT" },
+  // ── Prophets ──
   { name: "Isaiah", chapters: 66, testament: "OT" },
   { name: "Jeremiah", chapters: 52, testament: "OT" },
   { name: "Lamentations", chapters: 5, testament: "OT" },
+  { name: "Baruch", chapters: 6, testament: "OT" },
   { name: "Ezekiel", chapters: 48, testament: "OT" },
-  { name: "Daniel", chapters: 12, testament: "OT" },
+  { name: "Daniel", chapters: 14, testament: "OT" },
   { name: "Hosea", chapters: 14, testament: "OT" },
   { name: "Joel", chapters: 3, testament: "OT" },
   { name: "Amos", chapters: 9, testament: "OT" },
@@ -59,6 +70,7 @@ export const BIBLE_BOOKS: BibleBook[] = [
   { name: "Haggai", chapters: 2, testament: "OT" },
   { name: "Zechariah", chapters: 14, testament: "OT" },
   { name: "Malachi", chapters: 4, testament: "OT" },
+  // ── New Testament ──
   { name: "Matthew", chapters: 28, testament: "NT" },
   { name: "Mark", chapters: 16, testament: "NT" },
   { name: "Luke", chapters: 24, testament: "NT" },

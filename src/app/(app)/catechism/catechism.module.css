@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   Luther's Small Catechism Page
+   Catechism of the Catholic Church Page
    ═══════════════════════════════════════════════ */
 
 .container {
@@ -185,6 +185,37 @@
   color: var(--text-primary);
   font-style: italic;
   margin-bottom: 0.75rem;
+}
+
+/* ───────── Liturgical Dialogue (Mass responses) ───────── */
+.itemTextBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-family: var(--font-lora), serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.dialogueLine {
+  display: block;
+}
+
+.dialogueBreak {
+  display: block;
+  height: 0.5rem;
+}
+
+.role {
+  font-family: var(--font-cinzel), serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-rubric);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-right: 0.5rem;
 }
 
 .itemExplanation {

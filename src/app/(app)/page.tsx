@@ -208,9 +208,9 @@ export default function StudyPage() {
               <Image src="/sv_logo_transparent.png" alt="Studium Verbi" width={80} height={80} className={styles.welcomeFoil} />
               <h2 className={styles.welcomeTitle}>Studium Verbi</h2>
               <p className={styles.welcomeText}>
-                Explore covenant theology, messianic prophecy, and patristic
-                commentary. Ask a question and our theological assistant will
-                synthesize insights from scripture and the Church Fathers.
+                Explore Sacred Scripture, Sacred Tradition, and the teachings
+                of the Catholic Church. Ask a question and our theological
+                assistant will synthesize insights from scripture and the Magisterium.
               </p>
               <div className={styles.welcomeDivider} />
 
@@ -550,7 +550,7 @@ export default function StudyPage() {
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="Ask about scripture, theology, or the Church Fathers..."
+            placeholder="Ask about scripture, theology, or Catholic teaching..."
             className={styles.textInput}
             disabled={isTyping}
           />

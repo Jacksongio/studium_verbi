@@ -177,7 +177,7 @@ export default function Sidebar({
           <Link
             href="/catechism"
             className={`${styles.navLink} ${isCatechismPage ? styles.navLinkActive : ""}`}
-            title="Luther's Small Catechism"
+            title="Catechism of the Catholic Church"
             onClick={onNavigate}
           >
             <BookText size={16} />

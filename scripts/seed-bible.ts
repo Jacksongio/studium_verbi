@@ -1,5 +1,8 @@
 /**
- * Seed the WEB (World English Bible) into the Convex bibleVerses table with OpenAI embeddings.
+ * Seed the Douay-Rheims Bible (Catholic canon, 73 books) into the Convex
+ * bibleVerses table with OpenAI embeddings.
+ *
+ * Data source: bolls.life free Bible API (DRA translation)
  *
  * Usage:
  *   OPENAI_API_KEY=sk-... SEED_SECRET=xxx npx tsx scripts/seed-bible.ts
@@ -26,54 +29,87 @@ if (!CONVEX_URL) throw new Error("Missing NEXT_PUBLIC_CONVEX_URL");
 
 const convex = new ConvexHttpClient(CONVEX_URL);
 
-// The 66 books in canonical order — filenames in the TehShrike/world-english-bible repo
-const BOOKS = [
-  "genesis", "exodus", "leviticus", "numbers", "deuteronomy",
-  "joshua", "judges", "ruth", "1samuel", "2samuel",
-  "1kings", "2kings", "1chronicles", "2chronicles", "ezra",
-  "nehemiah", "esther", "job", "psalms", "proverbs",
-  "ecclesiastes", "songofsolomon", "isaiah", "jeremiah", "lamentations",
-  "ezekiel", "daniel", "hosea", "joel", "amos",
-  "obadiah", "jonah", "micah", "nahum", "habakkuk",
-  "zephaniah", "haggai", "zechariah", "malachi",
-  "matthew", "mark", "luke", "john", "acts",
-  "romans", "1corinthians", "2corinthians", "galatians", "ephesians",
-  "philippians", "colossians", "1thessalonians", "2thessalonians",
-  "1timothy", "2timothy", "titus", "philemon", "hebrews",
-  "james", "1peter", "2peter", "1john", "2john", "3john",
-  "jude", "revelation",
+// The 73-book Catholic canon in order, with bolls.life book IDs and chapter counts
+const BOOKS: { id: number; name: string; chapters: number }[] = [
+  // ── Pentateuch ──
+  { id: 1, name: "Genesis", chapters: 50 },
+  { id: 2, name: "Exodus", chapters: 40 },
+  { id: 3, name: "Leviticus", chapters: 27 },
+  { id: 4, name: "Numbers", chapters: 36 },
+  { id: 5, name: "Deuteronomy", chapters: 34 },
+  // ── Historical ──
+  { id: 6, name: "Joshua", chapters: 24 },
+  { id: 7, name: "Judges", chapters: 21 },
+  { id: 8, name: "Ruth", chapters: 4 },
+  { id: 9, name: "1 Samuel", chapters: 31 },
+  { id: 10, name: "2 Samuel", chapters: 24 },
+  { id: 11, name: "1 Kings", chapters: 22 },
+  { id: 12, name: "2 Kings", chapters: 25 },
+  { id: 13, name: "1 Chronicles", chapters: 29 },
+  { id: 14, name: "2 Chronicles", chapters: 36 },
+  { id: 15, name: "Ezra", chapters: 10 },
+  { id: 16, name: "Nehemiah", chapters: 13 },
+  { id: 17, name: "Tobit", chapters: 14 },
+  { id: 18, name: "Judith", chapters: 16 },
+  { id: 19, name: "Esther", chapters: 16 },
+  { id: 20, name: "1 Maccabees", chapters: 16 },
+  { id: 21, name: "2 Maccabees", chapters: 15 },
+  // ── Wisdom ──
+  { id: 22, name: "Job", chapters: 42 },
+  { id: 23, name: "Psalms", chapters: 150 },
+  { id: 24, name: "Proverbs", chapters: 31 },
+  { id: 25, name: "Ecclesiastes", chapters: 12 },
+  { id: 26, name: "Song of Solomon", chapters: 8 },
+  { id: 27, name: "Wisdom", chapters: 19 },
+  { id: 28, name: "Sirach", chapters: 51 },
+  // ── Prophets ──
+  { id: 29, name: "Isaiah", chapters: 66 },
+  { id: 30, name: "Jeremiah", chapters: 52 },
+  { id: 31, name: "Lamentations", chapters: 5 },
+  { id: 32, name: "Baruch", chapters: 6 },
+  { id: 33, name: "Ezekiel", chapters: 48 },
+  { id: 34, name: "Daniel", chapters: 14 },
+  { id: 35, name: "Hosea", chapters: 14 },
+  { id: 36, name: "Joel", chapters: 3 },
+  { id: 37, name: "Amos", chapters: 9 },
+  { id: 38, name: "Obadiah", chapters: 1 },
+  { id: 39, name: "Jonah", chapters: 4 },
+  { id: 40, name: "Micah", chapters: 7 },
+  { id: 41, name: "Nahum", chapters: 3 },
+  { id: 42, name: "Habakkuk", chapters: 3 },
+  { id: 43, name: "Zephaniah", chapters: 3 },
+  { id: 44, name: "Haggai", chapters: 2 },
+  { id: 45, name: "Zechariah", chapters: 14 },
+  { id: 46, name: "Malachi", chapters: 4 },
+  // ── New Testament ──
+  { id: 47, name: "Matthew", chapters: 28 },
+  { id: 48, name: "Mark", chapters: 16 },
+  { id: 49, name: "Luke", chapters: 24 },
+  { id: 50, name: "John", chapters: 21 },
+  { id: 51, name: "Acts", chapters: 28 },
+  { id: 52, name: "Romans", chapters: 16 },
+  { id: 53, name: "1 Corinthians", chapters: 16 },
+  { id: 54, name: "2 Corinthians", chapters: 13 },
+  { id: 55, name: "Galatians", chapters: 6 },
+  { id: 56, name: "Ephesians", chapters: 6 },
+  { id: 57, name: "Philippians", chapters: 4 },
+  { id: 58, name: "Colossians", chapters: 4 },
+  { id: 59, name: "1 Thessalonians", chapters: 5 },
+  { id: 60, name: "2 Thessalonians", chapters: 3 },
+  { id: 61, name: "1 Timothy", chapters: 6 },
+  { id: 62, name: "2 Timothy", chapters: 4 },
+  { id: 63, name: "Titus", chapters: 3 },
+  { id: 64, name: "Philemon", chapters: 1 },
+  { id: 65, name: "Hebrews", chapters: 13 },
+  { id: 66, name: "James", chapters: 5 },
+  { id: 67, name: "1 Peter", chapters: 5 },
+  { id: 68, name: "2 Peter", chapters: 3 },
+  { id: 69, name: "1 John", chapters: 5 },
+  { id: 70, name: "2 John", chapters: 1 },
+  { id: 71, name: "3 John", chapters: 1 },
+  { id: 72, name: "Jude", chapters: 1 },
+  { id: 73, name: "Revelation", chapters: 22 },
 ];
-
-// Map lowercase filenames to display names for DB storage
-const DISPLAY_NAMES: Record<string, string> = {
-  "genesis": "Genesis", "exodus": "Exodus", "leviticus": "Leviticus",
-  "numbers": "Numbers", "deuteronomy": "Deuteronomy", "joshua": "Joshua",
-  "judges": "Judges", "ruth": "Ruth",
-  "1samuel": "1 Samuel", "2samuel": "2 Samuel",
-  "1kings": "1 Kings", "2kings": "2 Kings",
-  "1chronicles": "1 Chronicles", "2chronicles": "2 Chronicles",
-  "ezra": "Ezra", "nehemiah": "Nehemiah", "esther": "Esther",
-  "job": "Job", "psalms": "Psalms", "proverbs": "Proverbs",
-  "ecclesiastes": "Ecclesiastes", "songofsolomon": "Song of Solomon",
-  "isaiah": "Isaiah", "jeremiah": "Jeremiah", "lamentations": "Lamentations",
-  "ezekiel": "Ezekiel", "daniel": "Daniel", "hosea": "Hosea",
-  "joel": "Joel", "amos": "Amos", "obadiah": "Obadiah",
-  "jonah": "Jonah", "micah": "Micah", "nahum": "Nahum",
-  "habakkuk": "Habakkuk", "zephaniah": "Zephaniah", "haggai": "Haggai",
-  "zechariah": "Zechariah", "malachi": "Malachi",
-  "matthew": "Matthew", "mark": "Mark", "luke": "Luke", "john": "John",
-  "acts": "Acts", "romans": "Romans",
-  "1corinthians": "1 Corinthians", "2corinthians": "2 Corinthians",
-  "galatians": "Galatians", "ephesians": "Ephesians",
-  "philippians": "Philippians", "colossians": "Colossians",
-  "1thessalonians": "1 Thessalonians", "2thessalonians": "2 Thessalonians",
-  "1timothy": "1 Timothy", "2timothy": "2 Timothy",
-  "titus": "Titus", "philemon": "Philemon", "hebrews": "Hebrews",
-  "james": "James",
-  "1peter": "1 Peter", "2peter": "2 Peter",
-  "1john": "1 John", "2john": "2 John", "3john": "3 John",
-  "jude": "Jude", "revelation": "Revelation",
-};
 
 interface RawVerse {
   book: string;
@@ -82,44 +118,18 @@ interface RawVerse {
   text: string;
 }
 
-async function fetchBookJson(bookFileName: string): Promise<any> {
-  const url = `https://raw.githubusercontent.com/TehShrike/world-english-bible/master/json/${bookFileName}.json`;
+async function fetchChapter(
+  bookId: number,
+  chapter: number
+): Promise<{ verse: number; text: string }[]> {
+  const url = `https://bolls.life/get-chapter/DRA/${bookId}/${chapter}/`;
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${bookFileName}: ${res.status}`);
-  return res.json();
-}
-
-/**
- * Parse the WEB JSON format into a flat list of verses.
- * The WEB repo stores each book as a flat array of items with types like
- * "paragraph text", "line text", etc. Poetry books (Psalms, Proverbs, etc.)
- * split a single verse across multiple "line text" entries, so we concatenate
- * entries that share the same chapter+verse number.
- */
-function parseWebBook(items: any[], displayName: string): RawVerse[] {
-  const verseMap = new Map<string, RawVerse>();
-
-  for (const item of items) {
-    if (!("verseNumber" in item) || !("value" in item)) continue;
-
-    const ch = Number(item.chapterNumber);
-    const vs = Number(item.verseNumber);
-    const key = `${ch}:${vs}`;
-    const text = String(item.value).trim();
-    if (!text) continue;
-
-    const existing = verseMap.get(key);
-    if (existing) {
-      existing.text += " " + text;
-    } else {
-      verseMap.set(key, { book: displayName, chapter: ch, verse: vs, text });
-    }
-  }
-
-  // Return in canonical order
-  return Array.from(verseMap.values()).sort(
-    (a, b) => a.chapter - b.chapter || a.verse - b.verse
-  );
+  if (!res.ok) throw new Error(`Failed to fetch book ${bookId} ch ${chapter}: ${res.status}`);
+  const data = await res.json();
+  return data.map((v: any) => ({
+    verse: v.verse,
+    text: String(v.text).trim(),
+  }));
 }
 
 async function generateEmbeddings(texts: string[]): Promise<number[][]> {
@@ -141,7 +151,6 @@ async function generateEmbeddings(texts: string[]): Promise<number[][]> {
   }
 
   const data = await res.json();
-  // Sort by index to ensure correct ordering
   return data.data
     .sort((a: any, b: any) => a.index - b.index)
     .map((d: any) => d.embedding);
@@ -152,31 +161,42 @@ async function sleep(ms: number) {
 }
 
 async function main() {
-  console.log("🔍 Starting WEB (World English Bible) seeding...\n");
+  console.log("Starting Douay-Rheims (Catholic canon) seeding...\n");
 
-  // Step 1: Download all books and collect verses
+  // Step 1: Download all books chapter by chapter
   const allVerses: RawVerse[] = [];
 
-  for (const bookFile of BOOKS) {
-    const displayName = DISPLAY_NAMES[bookFile] || bookFile;
-    process.stdout.write(`📖 Downloading ${displayName}...`);
+  for (const book of BOOKS) {
+    process.stdout.write(`Downloading ${book.name}...`);
+    let bookVerseCount = 0;
 
-    try {
-      const bookData = await fetchBookJson(bookFile);
-      const verses = parseWebBook(bookData, displayName);
-      allVerses.push(...verses);
-
-      const chapterCount = new Set(verses.map((v) => v.chapter)).size;
-      console.log(` ✓ (${chapterCount} chapters, ${verses.length} verses)`);
-    } catch (err: any) {
-      console.log(` ✗ ${err.message}`);
+    for (let ch = 1; ch <= book.chapters; ch++) {
+      try {
+        const verses = await fetchChapter(book.id, ch);
+        for (const v of verses) {
+          if (v.text) {
+            allVerses.push({
+              book: book.name,
+              chapter: ch,
+              verse: v.verse,
+              text: v.text,
+            });
+            bookVerseCount++;
+          }
+        }
+      } catch (err: any) {
+        console.log(` (error ch ${ch}: ${err.message})`);
+      }
+      // Rate limit: small delay between chapter fetches
+      await sleep(100);
     }
+
+    console.log(` done (${book.chapters} chapters, ${bookVerseCount} verses)`);
   }
 
-  console.log(`\n📊 Total verses collected: ${allVerses.length}\n`);
+  console.log(`\nTotal verses collected: ${allVerses.length}\n`);
 
   // Step 2: Generate embeddings in batches of 2000
-  // Using contextual enrichment (Approach #2): embed "Book Chapter:Verse - text"
   const EMBED_BATCH_SIZE = 2000;
   const allEmbeddings: number[][] = [];
 
@@ -189,20 +209,19 @@ async function main() {
     const batchNum = Math.floor(i / EMBED_BATCH_SIZE) + 1;
     const totalBatches = Math.ceil(allVerses.length / EMBED_BATCH_SIZE);
     process.stdout.write(
-      `🧠 Embedding batch ${batchNum}/${totalBatches} (${batch.length} verses)...`
+      `Embedding batch ${batchNum}/${totalBatches} (${batch.length} verses)...`
     );
 
     const embeddings = await generateEmbeddings(texts);
     allEmbeddings.push(...embeddings);
-    console.log(" ✓");
+    console.log(" done");
 
-    // Rate limit buffer
     if (i + EMBED_BATCH_SIZE < allVerses.length) {
       await sleep(500);
     }
   }
 
-  console.log(`\n✅ Generated ${allEmbeddings.length} embeddings\n`);
+  console.log(`\nGenerated ${allEmbeddings.length} embeddings\n`);
 
   // Step 3: Insert into Convex in batches of 50
   const INSERT_BATCH_SIZE = 50;
@@ -224,36 +243,34 @@ async function main() {
 
       if (inserted % 500 === 0 || inserted === allVerses.length) {
         console.log(
-          `💾 Inserted ${inserted}/${allVerses.length} verses (${((inserted / allVerses.length) * 100).toFixed(1)}%)`
+          `Inserted ${inserted}/${allVerses.length} verses (${((inserted / allVerses.length) * 100).toFixed(1)}%)`
         );
       }
     } catch (err: any) {
       console.error(
-        `\n❌ Error inserting batch at index ${i}: ${err.message}`
+        `\nError inserting batch at index ${i}: ${err.message}`
       );
       console.log("   Retrying in 2 seconds...");
       await sleep(2000);
-      // Retry once
       try {
         await convex.action(api.seed.seedBatch, {
           secret: SEED_SECRET!,
           verses: batchWithEmbeddings,
         });
         inserted += batch.length;
-        console.log("   ✓ Retry succeeded");
+        console.log("   Retry succeeded");
       } catch (retryErr: any) {
-        console.error(`   ✗ Retry failed: ${retryErr.message}`);
+        console.error(`   Retry failed: ${retryErr.message}`);
         console.error("   Skipping batch and continuing...");
       }
     }
 
-    // Small delay between inserts
     if (i + INSERT_BATCH_SIZE < allVerses.length) {
       await sleep(50);
     }
   }
 
-  console.log(`\n🎉 Seeding complete! Inserted ${inserted} verses.`);
+  console.log(`\nSeeding complete! Inserted ${inserted} verses.`);
 }
 
 main().catch((err) => {

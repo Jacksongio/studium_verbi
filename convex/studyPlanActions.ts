@@ -11,7 +11,7 @@ export const generatePlan = action({
     const userId = await getAuthUserId(ctx);
     if (!userId) throw new Error("Not authenticated");
 
-    const systemPrompt = `You are a Bible study plan designer. Create structured reading plans for WEB (World English Bible) study.
+    const systemPrompt = `You are a Catholic Bible study plan designer. Create structured reading plans for Douay-Rheims Bible study.
 Return ONLY valid JSON with no markdown formatting.
 
 Output format:

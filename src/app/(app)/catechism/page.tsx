@@ -10,25 +10,54 @@ import {
   Cross,
   HandHeart,
   Droplets,
-  HeartHandshake,
-  Wine,
-  Sunrise,
+  Star,
   ScrollText,
+  Sunrise,
+  Church,
+  Flame,
+  HeartHandshake,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { CATECHISM_SECTIONS } from "./catechism-data";
 import styles from "./catechism.module.css";
 
 const SECTION_ICONS: Record<string, LucideIcon> = {
+  "profession-of-faith": Cross,
+  "seven-sacraments": Droplets,
   "ten-commandments": Tablets,
-  "apostles-creed": Cross,
   "lords-prayer": HandHeart,
-  baptism: Droplets,
-  confession: HeartHandshake,
-  "sacrament-of-altar": Wine,
-  "daily-prayers": Sunrise,
-  "table-of-duties": ScrollText,
+  "prayers-and-mass": Flame,
+  "holy-rosary": HeartHandshake,
+  "blessed-virgin-mary": Star,
+  "moral-life": ScrollText,
+  "grace-and-justification": Sunrise,
+  "last-things": Church,
 };
+
+const ROLE_PATTERN = /^(PRIEST(?: \(OR DEACON\))?|PEOPLE|ALL|OR):\s*/;
+
+function renderLiturgicalText(text: string) {
+  const lines = text.split("\n");
+  return lines.map((line, i) => {
+    const match = line.match(ROLE_PATTERN);
+    if (match) {
+      const role = match[1];
+      const rest = line.slice(match[0].length);
+      return (
+        <span key={i} className={styles.dialogueLine}>
+          <span className={styles.role}>{role}</span>
+          <span>{rest}</span>
+        </span>
+      );
+    }
+    if (line === "") return <span key={i} className={styles.dialogueBreak} />;
+    return (
+      <span key={i} className={styles.dialogueLine}>
+        {line}
+      </span>
+    );
+  });
+}
 
 export default function CatechismPage() {
   const searchParams = useSearchParams();
@@ -99,12 +128,20 @@ export default function CatechismPage() {
               <div key={idx} className={styles.itemCard}>
                 <h3 className={styles.itemTitle}>{item.title}</h3>
 
-                {item.text && <p className={styles.itemText}>{item.text}</p>}
+                {item.text && (
+                  ROLE_PATTERN.test(item.text) || item.text.includes("\n") ? (
+                    <div className={styles.itemTextBlock}>
+                      {renderLiturgicalText(item.text)}
+                    </div>
+                  ) : (
+                    <p className={styles.itemText}>{item.text}</p>
+                  )
+                )}
 
                 {item.explanation && (
                   <div>
                     <span className={styles.itemExplanationLabel}>
-                      What does this mean?
+                      The Church teaches
                     </span>
                     <p className={styles.itemExplanation}>
                       {item.explanation}
@@ -123,14 +160,14 @@ export default function CatechismPage() {
 
             {/* Source attribution */}
             <div className={styles.attribution}>
-              Luther&rsquo;s Small Catechism (1529) &middot;{" "}
+              Catechism of the Catholic Church (1992) &middot;{" "}
               <a
-                href="https://catechism.cph.org/"
+                href="https://www.vatican.va/archive/ENG0015/_INDEX.HTM"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.attributionLink}
               >
-                catechism.cph.org
+                vatican.va
               </a>
             </div>
           </div>
@@ -149,10 +186,10 @@ export default function CatechismPage() {
             <div className={styles.headerIcon}>
               <BookText size={24} />
             </div>
-            <h1 className={styles.title}>Luther&rsquo;s Small Catechism</h1>
+            <h1 className={styles.title}>Catechism of the Catholic Church</h1>
             <p className={styles.subtitle}>
-              The six chief parts of Christian doctrine, as taught by Dr. Martin
-              Luther for simple instruction in the faith.
+              The four pillars of Catholic faith: the Creed, the Sacraments,
+              the Moral Life, and Prayer.
             </p>
           </div>
 
@@ -177,14 +214,14 @@ export default function CatechismPage() {
 
           {/* Source attribution */}
           <div className={styles.attribution}>
-            Luther&rsquo;s Small Catechism (1529) &middot;{" "}
+            Catechism of the Catholic Church (1992) &middot;{" "}
             <a
-              href="https://catechism.cph.org/"
+              href="https://www.vatican.va/archive/ENG0015/_INDEX.HTM"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.attributionLink}
             >
-              catechism.cph.org
+              vatican.va
             </a>
           </div>
         </div>

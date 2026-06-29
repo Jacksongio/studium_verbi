@@ -167,8 +167,8 @@ export default function AuthPage() {
             Search the scriptures, for in them you find eternal life.
           </p>
           <p className={styles.brandDesc}>
-            A theological study companion for exploring covenant theology,
-            messianic prophecy, and the wisdom of the Church Fathers.
+            A Catholic study companion for exploring Sacred Scripture,
+            Sacred Tradition, and the teachings of the Magisterium.
           </p>
         </div>
         <p className={styles.brandFooter}>

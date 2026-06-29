@@ -23,8 +23,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Studium Verbi | Premium Patristic Bible Study & RAG Assistant",
-  description: "An elegant, Gutenberg-styled Bible reader and advanced theological RAG study companion. Explore scriptures, view patristic commentaries, highlight verses, and seek wisdom with our AI study assistant.",
+  title: "Studium Verbi | Catholic Bible Study & Theological Assistant",
+  description: "An elegant, Gutenberg-styled Bible reader and Catholic theological study companion. Explore Sacred Scripture, the Catechism, and the teachings of the Magisterium with our AI study assistant.",
   icons: {
     icon: "/favicon.ico",
   },
