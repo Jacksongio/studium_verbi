@@ -6,6 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import { BookOpen, ChevronLeft, ChevronRight, NotebookPen, X } from "lucide-react";
 import { useBibleContext } from "../components/BibleContext";
 import styles from "./bible.module.css";
+import { BIBLE_EDITION, BIBLE_SOURCE_URL, BIBLE_TRANSLATION } from "../../lib/bible-books";
 
 export default function BiblePage() {
   const { location, navigate, prev, next } = useBibleContext();
@@ -102,9 +103,12 @@ export default function BiblePage() {
       {location ? (
         <>
           <div className={styles.readingHeader}>
-            <h1 className={styles.readingRef}>
-              {location.book.name} {location.chapter}
-            </h1>
+            <div>
+              <h1 className={styles.readingRef}>
+                {location.book.name} {location.chapter}
+              </h1>
+              <p className={styles.translationLabel}>{BIBLE_TRANSLATION} · 1899</p>
+            </div>
             <div className={styles.headerActions}>
               <button
                 className={`${styles.notebookToggle} ${notebookOpen ? styles.notebookToggleActive : ""}`}
@@ -191,6 +195,12 @@ export default function BiblePage() {
                   })}
                 </p>
 
+                <p className={styles.sourceCredit}>
+                  <a href={BIBLE_SOURCE_URL}>{BIBLE_EDITION}</a>. Public domain.
+                  {' '}Psalm and verse numbering follows this edition and can differ
+                  from modern translations.
+                </p>
+
                 {/* Bottom page navigation */}
                 <div className={styles.pageNav}>
                   {prev && (
@@ -262,6 +272,7 @@ export default function BiblePage() {
           <p className={styles.emptySubtitle}>
             Select a book and chapter from the sidebar to begin reading.
           </p>
+          <p className={styles.sourceCredit}>{BIBLE_EDITION}</p>
         </div>
       )}
     </main>

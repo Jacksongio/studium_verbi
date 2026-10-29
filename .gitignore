@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude
 CLAUDE.md
+
+# Prepared Bible import and embedding cache
+/.cache/bible/

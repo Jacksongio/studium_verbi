@@ -1,6 +1,7 @@
 import { action } from "./_generated/server";
 import { internal } from "./_generated/api";
 import { v } from "convex/values";
+import { BIBLE_BOOKS } from "../src/app/lib/bible-books";
 
 // ── Utility: cosine similarity between two vectors ──
 function cosineSimilarity(a: number[], b: number[]): number {
@@ -190,7 +191,7 @@ Guidelines:
 
     const userPrompt = `The scholar asks: "${args.query}"
 
-Here are the ONLY WEB passages you may cite (do not cite any others):
+Here are the ONLY Douay–Rheims passages you may cite (do not cite any others):
 ${verseCitations}
 
 Provide a thorough theological analysis of the scholar's question. Cite only the passages that are directly relevant — you do not need to use all of them. Do not reference any verse not listed above.`;
@@ -252,21 +253,7 @@ Provide a thorough theological analysis of the scholar's question. Cite only the
 
     // ── Step 8: Extract any extra citations the LLM made beyond the retrieved set ──
     // Regex captures references like "Book Ch:V" or "Book Ch:A-B"
-    const knownBooks = [
-      "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
-      "Joshua", "Judges", "Ruth", "1 Samuel", "2 Samuel",
-      "1 Kings", "2 Kings", "1 Chronicles", "2 Chronicles", "Ezra",
-      "Nehemiah", "Esther", "Job", "Psalms", "Proverbs",
-      "Ecclesiastes", "Song of Solomon", "Isaiah", "Jeremiah",
-      "Lamentations", "Ezekiel", "Daniel", "Hosea", "Joel", "Amos",
-      "Obadiah", "Jonah", "Micah", "Nahum", "Habakkuk", "Zephaniah",
-      "Haggai", "Zechariah", "Malachi", "Matthew", "Mark", "Luke",
-      "John", "Acts", "Romans", "1 Corinthians", "2 Corinthians",
-      "Galatians", "Ephesians", "Philippians", "Colossians",
-      "1 Thessalonians", "2 Thessalonians", "1 Timothy", "2 Timothy",
-      "Titus", "Philemon", "Hebrews", "James", "1 Peter", "2 Peter",
-      "1 John", "2 John", "3 John", "Jude", "Revelation",
-    ];
+    const knownBooks = BIBLE_BOOKS.map((book) => book.name);
     const booksPattern = knownBooks
       .map((b) => b.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
       .join("|");

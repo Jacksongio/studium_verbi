@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+import { BIBLE_BOOKS, useBibleContext } from "../components/BibleContext";
 import {
   MYSTERY_SETS,
   buildSteps,
@@ -274,7 +276,7 @@ export default function RosaryPrayer() {
                 <div className={styles.banner}>
                   <p className={styles.bannerTitle}>{step.mystery.title}</p>
                   <p className={styles.bannerFruit}>
-                    Grace to ask: {step.mystery.fruit}
+                    Fruit of the mystery: {step.mystery.fruit}
                   </p>
                 </div>
               )}
@@ -284,12 +286,15 @@ export default function RosaryPrayer() {
               {step.kicker === "Pray" && step.note && (
                 <p className={styles.note}>{step.note}</p>
               )}
+              {step.reference && <p className={styles.note}>Scripture reading for reflection (optional)</p>}
               <p className={styles.prayerText}>{step.text}</p>
               {step.kicker !== "Pray" && step.note && (
                 <p className={styles.note}>{step.note}</p>
               )}
               {step.reference && (
-                <p className={styles.reference}>{step.reference}</p>
+                <p className={styles.reference}>
+                  <ScriptureLink reference={step.reference} />
+                </p>
               )}
               <StepMarker marker={step.marker} />
             </div>
@@ -353,9 +358,49 @@ export default function RosaryPrayer() {
               onHome={() => setMode("home")}
             />
           )}
+          {mode === "home" && <RosarySources />}
         </div>
       </div>
     </section>
+  );
+}
+
+function ScriptureLink({ reference }: { reference: string }) {
+  const bible = useBibleContext();
+  const match = /^(.+) (\d+):\d+(?:[–-]\d+)?$/.exec(reference);
+  const book = match && BIBLE_BOOKS.find((item) => item.name === match[1]);
+  const chapter = match ? Number(match[2]) : 0;
+
+  if (!book || chapter < 1 || chapter > book.chapters) {
+    return <>{reference} · Douay–Rheims</>;
+  }
+
+  return (
+    <Link
+      href="/bible"
+      className={styles.scriptureLink}
+      onNavigate={() => {
+        bible.setSearchQuery("");
+        bible.setTestament(book.testament);
+        bible.navigate({ book, chapter });
+      }}
+    >
+      {reference} · Douay–Rheims
+    </Link>
+  );
+}
+
+function RosarySources() {
+  return (
+    <p className={styles.seasonNote}>
+      Scripture selections and spiritual fruits follow the{' '}
+      <a href="https://www.usccb.org/how-to-pray-the-rosary">
+        U.S. Conference of Catholic Bishops’ “How to Pray the Rosary”
+      </a>.
+      {' '}Readings use the public-domain{' '}
+      <a href="https://ebible.org/engDRA/">Douay–Rheims Bible (1899)</a>;
+      {' '}wording differs from the translation in the USCCB guide.
+    </p>
   );
 }
 
@@ -394,6 +439,7 @@ function Home({
           A step-by-step way to pray the mysteries with Mary.
         </p>
       </header>
+
       {ready && selected && (
         <>
           <p className={styles.dayLine}>
@@ -548,8 +594,9 @@ function HowTo({
           customary. On Sundays of Lent, the Sorrowful Mysteries.
         </p>
         <h2 className={styles.sectionTitle}>While you pray</h2>
+
         <p className={styles.body}>
-          At the start of a decade, read the scene once. Through the ten Hail
+          At the start of a decade, you may read the Scripture passage. Through the ten Hail
           Marys, keep that scene in mind, or quietly ask for the grace named
           with it. When your attention wanders, return at the next bead. The
           words on the prayer screen are the ordinary form of each prayer. You
@@ -600,6 +647,7 @@ function Mysteries({
         On Sundays of Advent and Christmas, the Joyful Mysteries are customary.
         On Sundays of Lent, the Sorrowful Mysteries.
       </p>
+
       {MYSTERY_SETS.map((set) => (
         <article
           key={set.id}
@@ -627,10 +675,11 @@ function Mysteries({
                 <span className={styles.mysteryIndex}>{index + 1}</span>
                 {mystery.title}
               </h3>
+              <p className={styles.note}>Scripture reading for reflection (optional)</p>
               <p className={styles.meditation}>{mystery.meditation}</p>
               <div className={styles.metaRow}>
-                <span>{mystery.reference}</span>
-                <span>Grace to ask: {mystery.fruit}</span>
+                <ScriptureLink reference={mystery.reference} />
+                <span>Fruit of the mystery: {mystery.fruit}</span>
               </div>
             </div>
           ))}

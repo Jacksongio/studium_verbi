@@ -82,6 +82,10 @@ export const PRAYERS = {
     "O God, whose Only Begotten Son,\nby his life, Death, and Resurrection,\nhas purchased for us the rewards of eternal life,\ngrant, we beseech thee,\nthat while meditating on these mysteries\nof the most holy Rosary\nof the Blessed Virgin Mary,\nwe may imitate what they contain\nand obtain what they promise,\nthrough the same Christ our Lord.\nAmen.",
 } as const;
 
+// Scripture selections and spiritual fruits: USCCB, "How to Pray the Rosary".
+// https://www.usccb.org/how-to-pray-the-rosary
+// Readings use the public-domain Douay–Rheims American Edition (1899),
+// sourced from https://ebible.org/engDRA/ (not the guide's modern translation).
 export const MYSTERY_SETS: MysterySet[] = [
   {
     id: "joyful",
@@ -92,37 +96,37 @@ export const MYSTERY_SETS: MysterySet[] = [
       {
         title: "The Annunciation",
         meditation:
-          "The angel Gabriel announces that Mary will conceive the Son of God by the Holy Spirit. Mary gives her yes: she is the handmaid of the Lord.",
-        reference: "Luke 1:26–38",
+          "And in the sixth month, the angel Gabriel was sent from God into a city of Galilee, called Nazareth, To a virgin espoused to a man whose name was Joseph, of the house of David; and the virgin’s name was Mary.",
+        reference: "Luke 1:26–27",
         fruit: "Humility",
       },
       {
         title: "The Visitation",
         meditation:
-          "Mary goes in haste to her cousin Elizabeth. Elizabeth blesses her, and Mary praises God in the Magnificat.",
-        reference: "Luke 1:39–56",
-        fruit: "Love of neighbor",
+          "And Mary rising up in those days, went into the hill country with haste into a city of Juda. And she entered into the house of Zachary, and saluted Elizabeth. And it came to pass, that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost: And she cried out with a loud voice, and said: Blessed art thou among women, and blessed is the fruit of thy womb.",
+        reference: "Luke 1:39–42",
+        fruit: "Love of Neighbor",
       },
       {
         title: "The Nativity",
         meditation:
-          "Jesus is born in Bethlehem and laid in a manger. Mary keeps these things and ponders them in her heart.",
-        reference: "Luke 2:1–20",
-        fruit: "Poverty of spirit",
+          "And it came to pass, that in those days there went out a decree from Caesar Augustus, that the whole world should be enrolled. This enrolling was first made by Cyrinus, the governor of Syria. And all went to be enrolled, every one into his own city. And Joseph also went up from Galilee, out of the city of Nazareth into Judea, to the city of David, which is called Bethlehem: because he was of the house and family of David, To be enrolled with Mary his espoused wife, who was with child. And it came to pass, that when they were there, her days were accomplished, that she should be delivered. And she brought forth her firstborn son, and wrapped him up in swaddling clothes, and laid him in a manger; because there was no room for them in the inn.",
+        reference: "Luke 2:1–7",
+        fruit: "Poverty",
       },
       {
         title: "The Presentation",
         meditation:
-          "Mary and Joseph present Jesus in the Temple and offer the sacrifice of the poor. Simeon takes the child in his arms and blesses God.",
-        reference: "Luke 2:22–35",
-        fruit: "Obedience",
+          "And after eight days were accomplished, that the child should be circumcised, his name was called JESUS, which was called by the angel, before he was conceived in the womb. And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord: As it is written in the law of the Lord: Every male opening the womb shall be called holy to the Lord: And to offer a sacrifice, according as it is written in the law of the Lord, a pair of turtledoves, or two young pigeons:",
+        reference: "Luke 2:21–24",
+        fruit: "Purity of Heart and Body",
       },
       {
         title: "The Finding in the Temple",
         meditation:
-          "After three days of searching, Mary and Joseph find the boy Jesus in the Temple, among the teachers.",
-        reference: "Luke 2:41–52",
-        fruit: "Joy in finding Jesus",
+          "And his parents went every year to Jerusalem, at the solemn day of the pasch, And when he was twelve years old, they going up into Jerusalem, according to the custom of the feast, And having fulfilled the days, when they returned, the child Jesus remained in Jerusalem; and his parents knew it not. And thinking that he was in the company, they came a day’s journey, and sought him among their kinsfolks and acquaintance. And not finding him, they returned into Jerusalem, seeking him. And it came to pass, that, after three days, they found him in the temple, sitting in the midst of the doctors, hearing them, and asking them questions. And all that heard him were astonished at his wisdom and his answers.",
+        reference: "Luke 2:41–47",
+        fruit: "Devotion to Jesus",
       },
     ],
   },
@@ -135,37 +139,37 @@ export const MYSTERY_SETS: MysterySet[] = [
       {
         title: "The Baptism of the Lord",
         meditation:
-          "Jesus is baptized by John in the Jordan. The Spirit descends upon him, and the Father names him his beloved Son.",
-        reference: "Matthew 3:13–17",
+          "And Jesus being baptized, forthwith came out of the water: and lo, the heavens were opened to him: and he saw the Spirit of God descending as a dove, and coming upon him. And behold a voice from heaven, saying: This is my beloved Son, in whom I am well pleased.",
+        reference: "Matthew 3:16–17",
         fruit: "Openness to the Holy Spirit",
       },
       {
         title: "The Wedding at Cana",
         meditation:
-          "At a wedding in Cana, Mary tells the servants to do whatever Jesus says. He turns water into wine, the first of his signs.",
-        reference: "John 2:1–11",
+          "And the third day, there was a marriage in Cana of Galilee: and the mother of Jesus was there. And Jesus also was invited, and his disciples, to the marriage. And the wine failing, the mother of Jesus saith to him: They have no wine. And Jesus saith to her: Woman, what is that to me and to thee? my hour is not yet come. His mother saith to the waiters: Whatsoever he shall say to you, do ye.",
+        reference: "John 2:1–5",
         fruit: "To Jesus through Mary",
       },
       {
         title: "The Proclamation of the Kingdom",
         meditation:
-          "Jesus proclaims that the kingdom of God is at hand, and he calls the people to repent and believe.",
-        reference: "Mark 1:14–15",
-        fruit: "Conversion of heart",
+          "And saying: The time is accomplished, and the kingdom of God is at hand: repent, and believe the gospel.",
+        reference: "Mark 1:15",
+        fruit: "Conversion",
       },
       {
         title: "The Transfiguration",
         meditation:
-          "On the mountain, Jesus is transfigured before Peter, James, and John. The Father tells them to listen to his Son.",
-        reference: "Matthew 17:1–8",
+          "And after six days Jesus taketh unto him Peter and James, and John his brother, and bringeth them up into a high mountain apart: And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow.",
+        reference: "Matthew 17:1–2",
         fruit: "Desire for holiness",
       },
       {
         title: "The Institution of the Eucharist",
         meditation:
-          "At the Last Supper, Jesus gives the Apostles his Body and Blood under the appearances of bread and wine.",
-        reference: "Matthew 26:26–28",
-        fruit: "Love of the Eucharist",
+          "And whilst they were at supper, Jesus took bread, and blessed, and broke: and gave to his disciples, and said: Take ye, and eat. This is my body.",
+        reference: "Matthew 26:26",
+        fruit: "Adoration",
       },
     ],
   },
@@ -178,36 +182,37 @@ export const MYSTERY_SETS: MysterySet[] = [
       {
         title: "The Agony in the Garden",
         meditation:
-          "In Gethsemane, Jesus prays that the Father’s will be done. His sweat becomes as drops of blood falling to the ground.",
-        reference: "Luke 22:39–46",
-        fruit: "Sorrow for sin",
+          "Then Jesus came with them into a country place which is called Gethsemani; and he said to his disciples: Sit you here, till I go yonder and pray. And taking with him Peter and the two sons of Zebedee, he began to grow sorrowful and to be sad. Then he saith to them: My soul is sorrowful even unto death: stay you here, and watch with me. And going a little further, he fell upon his face, praying, and saying: My Father, if it be possible, let this chalice pass from me. Nevertheless not as I will, but as thou wilt.",
+        reference: "Matthew 26:36–39",
+        fruit: "Obedience to God’s Will",
       },
       {
         title: "The Scourging at the Pillar",
-        meditation: "Pilate takes Jesus and has him scourged.",
-        reference: "John 19:1",
-        fruit: "Purity",
+        meditation:
+          "Then he released to them Barabbas, and having scourged Jesus, delivered him unto them to be crucified.",
+        reference: "Matthew 27:26",
+        fruit: "Mortification",
       },
       {
         title: "The Crowning with Thorns",
         meditation:
-          "The soldiers press a crown of thorns on Jesus’ head and mock him as king.",
-        reference: "Matthew 27:27–31",
+          "Then the soldiers of the governor taking Jesus into the hall, gathered together unto him the whole band; And stripping him, they put a scarlet cloak about him. And platting a crown of thorns, they put it upon his head, and a reed in his right hand. And bowing the knee before him, they mocked him, saying: Hail, king of the Jews.",
+        reference: "Matthew 27:27–29",
         fruit: "Courage",
       },
       {
         title: "The Carrying of the Cross",
         meditation:
-          "Jesus carries his Cross to the place of the Skull. Simon of Cyrene is made to carry it behind him.",
-        reference: "John 19:17; Luke 23:26",
+          "And they forced one Simon a Cyrenian who passed by, coming out of the country, the father of Alexander and of Rufus, to take up his cross. And they bring him into the place called Golgotha, which being interpreted is, The place of Calvary.",
+        reference: "Mark 15:21–22",
         fruit: "Patience",
       },
       {
         title: "The Crucifixion",
         meditation:
-          "Jesus is crucified between two thieves. He entrusts his Mother to the beloved disciple, and he gives up his spirit.",
-        reference: "John 19:18–30",
-        fruit: "Perseverance",
+          "And when they were come to the place which is called Calvary, they crucified him there; and the robbers, one on the right hand, and the other on the left. And Jesus said: Father, forgive them, for they know not what they do. But they, dividing his garments, cast lots. And the people stood beholding, and the rulers with them derided him, saying: He saved others; let him save himself, if he be Christ, the elect of God. And the soldiers also mocked him, coming to him, and offering him vinegar, And saying: If thou be the king of the Jews, save thyself. And there was also a superscription written over him in letters of Greek, and Latin, and Hebrew: THIS IS THE KING OF THE JEWS. And one of those robbers who were hanged, blasphemed him, saying: If thou be Christ, save thyself and us. But the other answering, rebuked him, saying: Neither dost thou fear God, seeing thou art condemned under the same condemnation? And we indeed justly, for we receive the due reward of our deeds; but this man hath done no evil. And he said to Jesus: Lord, remember me when thou shalt come into thy kingdom. And Jesus said to him: Amen I say to thee, this day thou shalt be with me in paradise. And it was almost the sixth hour; and there was darkness over all the earth until the ninth hour. And the sun was darkened, and the veil of the temple was rent in the midst. And Jesus crying out with a loud voice, said: Father, into thy hands I commend my spirit. And saying this, he gave up the ghost.",
+        reference: "Luke 23:33–46",
+        fruit: "Sorrow for our Sins",
       },
     ],
   },
@@ -220,37 +225,37 @@ export const MYSTERY_SETS: MysterySet[] = [
       {
         title: "The Resurrection",
         meditation:
-          "On the first day of the week the tomb is empty. The risen Jesus meets the women and sends them to tell the disciples.",
-        reference: "Matthew 28:1–10",
+          "And on the first day of the week, very early in the morning, they came to the sepulchre, bringing the spices which they had prepared. And they found the stone rolled back from the sepulchre. And going in, they found not the body of the Lord Jesus. And it came to pass, as they were astonished in their mind at this, behold, two men stood by them, in shining apparel. And as they were afraid, and bowed down their countenance towards the ground, they said unto them: Why seek you the living with the dead?",
+        reference: "Luke 24:1–5",
         fruit: "Faith",
       },
       {
         title: "The Ascension",
         meditation:
-          "Jesus is taken up into heaven as the Apostles look on. He will come again as they saw him go.",
-        reference: "Acts 1:9–11",
+          "And the Lord Jesus, after he had spoken to them, was taken up into heaven, and sitteth on the right hand of God.",
+        reference: "Mark 16:19",
         fruit: "Hope",
       },
       {
         title: "The Descent of the Holy Spirit",
         meditation:
-          "Mary and the Apostles are gathered in prayer. The Holy Spirit comes upon them, and they proclaim the mighty works of God.",
-        reference: "Acts 1:14; 2:1–11",
-        fruit: "The gifts of the Holy Spirit",
+          "And when the days of the Pentecost were accomplished, they were all together in one place: And suddenly there came a sound from heaven, as of a mighty wind coming, and it filled the whole house where they were sitting. And there appeared to them parted tongues as it were of fire, and it sat upon every one of them: And they were all filled with the Holy Ghost, and they began to speak with divers tongues, according as the Holy Ghost gave them to speak.",
+        reference: "Acts 2:1–4",
+        fruit: "Wisdom",
       },
       {
         title: "The Assumption",
         meditation:
-          "At the end of her earthly life, Mary is assumed body and soul into heavenly glory. She already shares, in her whole person, in her Son’s resurrection.",
-        reference: "CCC 966",
-        fruit: "A holy death",
+          "Because he hath regarded the humility of his handmaid; for behold from henceforth all generations shall call me blessed. Because he that is mighty, hath done great things to me; and holy is his name.",
+        reference: "Luke 1:48–49",
+        fruit: "Devotion to Mary",
       },
       {
         title: "The Coronation of Mary",
         meditation:
-          "The Lord exalts Mary as Queen over all things, so that she might be more fully conformed to her Son. From heaven she intercedes for the Church on earth.",
-        reference: "CCC 966, 969",
-        fruit: "Trust in Mary’s intercession",
+          "And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars:",
+        reference: "Revelation 12:1",
+        fruit: "Grace of a happy death",
       },
     ],
   },

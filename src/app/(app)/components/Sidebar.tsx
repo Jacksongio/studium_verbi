@@ -20,6 +20,7 @@ import {
   Search,
   Bookmark,
   GraduationCap,
+  CalendarDays,
 } from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
 import { useChatContext } from "./ChatContext";
@@ -205,6 +206,15 @@ export default function Sidebar({
               <path d="M10.15 16.6h3.7" />
             </svg>
             <span className={styles.navLinkLabel}>Rosary</span>
+          </Link>
+          <Link
+            href="/calendar"
+            className={`${styles.navLink} ${pathname === "/calendar" ? styles.navLinkActive : ""}`}
+            title="Catholic Calendar"
+            onClick={onNavigate}
+          >
+            <CalendarDays size={16} />
+            <span className={styles.navLinkLabel}>Calendar</span>
           </Link>
         </nav>
 
