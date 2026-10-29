@@ -20,6 +20,7 @@ import {
   Search,
   Bookmark,
   GraduationCap,
+  CalendarDays,
 } from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
 import { useChatContext } from "./ChatContext";
@@ -182,6 +183,38 @@ export default function Sidebar({
           >
             <BookText size={16} />
             <span className={styles.navLinkLabel}>Catechism</span>
+          </Link>
+          <Link
+            href="/rosary"
+            className={`${styles.navLink} ${pathname === "/rosary" ? styles.navLinkActive : ""}`}
+            title="Holy Rosary"
+            onClick={onNavigate}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="7" r="4.25" />
+              <path d="M12 11.25v9.25" />
+              <path d="M10.15 16.6h3.7" />
+            </svg>
+            <span className={styles.navLinkLabel}>Rosary</span>
+          </Link>
+          <Link
+            href="/calendar"
+            className={`${styles.navLink} ${pathname === "/calendar" ? styles.navLinkActive : ""}`}
+            title="Catholic Calendar"
+            onClick={onNavigate}
+          >
+            <CalendarDays size={16} />
+            <span className={styles.navLinkLabel}>Calendar</span>
           </Link>
         </nav>
 

@@ -30,6 +30,25 @@
   letter-spacing: 0.04em;
 }
 
+.translationLabel {
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.sourceCredit {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.sourceCredit a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .chapterNav {
   display: flex;
   align-items: center;

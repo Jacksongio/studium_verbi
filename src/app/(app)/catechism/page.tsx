@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   BookText,
@@ -113,6 +114,11 @@ export default function CatechismPage() {
               <h1 className={styles.title}>{activeSection.title}</h1>
               {activeSection.subtitle && (
                 <p className={styles.subtitle}>{activeSection.subtitle}</p>
+              )}
+              {activeSection.id === "holy-rosary" && (
+                <Link href="/rosary" className={styles.prayLink}>
+                  Pray the Rosary, one bead at a time
+                </Link>
               )}
             </div>
 

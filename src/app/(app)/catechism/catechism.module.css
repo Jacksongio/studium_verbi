@@ -90,6 +90,20 @@
   line-height: 1.5;
 }
 
+.prayLink {
+  display: inline-block;
+  margin-top: 0.85rem;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-rubric);
+  text-decoration: none;
+}
+
+.prayLink:hover {
+  text-decoration: underline;
+}
+
 /* ───────── Section Grid (Landing Page) ───────── */
 .sectionGrid {
   display: grid;

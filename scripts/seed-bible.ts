@@ -1,279 +1,141 @@
-/**
- * Seed the Douay-Rheims Bible (Catholic canon, 73 books) into the Convex
- * bibleVerses table with OpenAI embeddings.
- *
- * Data source: bolls.life free Bible API (DRA translation)
- *
- * Usage:
- *   OPENAI_API_KEY=sk-... SEED_SECRET=xxx npx tsx scripts/seed-bible.ts
- *
- * Or set them in .env.local and run:
- *   npx tsx scripts/seed-bible.ts
- */
-
-import { ConvexHttpClient } from "convex/browser";
-import { api } from "../convex/_generated/api";
+/** Prepare (never directly import) a validated Douay–Rheims Bible replacement. */
+import { createHash } from "node:crypto";
+import { mkdir, open, readFile, writeFile, rename } from "node:fs/promises";
+import { resolve } from "node:path";
 import * as dotenv from "dotenv";
-import { resolve } from "path";
+import { BIBLE_BOOKS } from "../src/app/lib/bible-books";
 
-// Load .env.local
-dotenv.config({ path: resolve(process.cwd(), ".env.local") });
+dotenv.config({ path: resolve(".env.local"), quiet: true });
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const SEED_SECRET = process.env.SEED_SECRET;
-const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL;
-
-if (!OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
-if (!SEED_SECRET) throw new Error("Missing SEED_SECRET");
-if (!CONVEX_URL) throw new Error("Missing NEXT_PUBLIC_CONVEX_URL");
-
-const convex = new ConvexHttpClient(CONVEX_URL);
-
-// The 73-book Catholic canon in order, with bolls.life book IDs and chapter counts
-const BOOKS: { id: number; name: string; chapters: number }[] = [
-  // ── Pentateuch ──
-  { id: 1, name: "Genesis", chapters: 50 },
-  { id: 2, name: "Exodus", chapters: 40 },
-  { id: 3, name: "Leviticus", chapters: 27 },
-  { id: 4, name: "Numbers", chapters: 36 },
-  { id: 5, name: "Deuteronomy", chapters: 34 },
-  // ── Historical ──
-  { id: 6, name: "Joshua", chapters: 24 },
-  { id: 7, name: "Judges", chapters: 21 },
-  { id: 8, name: "Ruth", chapters: 4 },
-  { id: 9, name: "1 Samuel", chapters: 31 },
-  { id: 10, name: "2 Samuel", chapters: 24 },
-  { id: 11, name: "1 Kings", chapters: 22 },
-  { id: 12, name: "2 Kings", chapters: 25 },
-  { id: 13, name: "1 Chronicles", chapters: 29 },
-  { id: 14, name: "2 Chronicles", chapters: 36 },
-  { id: 15, name: "Ezra", chapters: 10 },
-  { id: 16, name: "Nehemiah", chapters: 13 },
-  { id: 17, name: "Tobit", chapters: 14 },
-  { id: 18, name: "Judith", chapters: 16 },
-  { id: 19, name: "Esther", chapters: 16 },
-  { id: 20, name: "1 Maccabees", chapters: 16 },
-  { id: 21, name: "2 Maccabees", chapters: 15 },
-  // ── Wisdom ──
-  { id: 22, name: "Job", chapters: 42 },
-  { id: 23, name: "Psalms", chapters: 150 },
-  { id: 24, name: "Proverbs", chapters: 31 },
-  { id: 25, name: "Ecclesiastes", chapters: 12 },
-  { id: 26, name: "Song of Solomon", chapters: 8 },
-  { id: 27, name: "Wisdom", chapters: 19 },
-  { id: 28, name: "Sirach", chapters: 51 },
-  // ── Prophets ──
-  { id: 29, name: "Isaiah", chapters: 66 },
-  { id: 30, name: "Jeremiah", chapters: 52 },
-  { id: 31, name: "Lamentations", chapters: 5 },
-  { id: 32, name: "Baruch", chapters: 6 },
-  { id: 33, name: "Ezekiel", chapters: 48 },
-  { id: 34, name: "Daniel", chapters: 14 },
-  { id: 35, name: "Hosea", chapters: 14 },
-  { id: 36, name: "Joel", chapters: 3 },
-  { id: 37, name: "Amos", chapters: 9 },
-  { id: 38, name: "Obadiah", chapters: 1 },
-  { id: 39, name: "Jonah", chapters: 4 },
-  { id: 40, name: "Micah", chapters: 7 },
-  { id: 41, name: "Nahum", chapters: 3 },
-  { id: 42, name: "Habakkuk", chapters: 3 },
-  { id: 43, name: "Zephaniah", chapters: 3 },
-  { id: 44, name: "Haggai", chapters: 2 },
-  { id: 45, name: "Zechariah", chapters: 14 },
-  { id: 46, name: "Malachi", chapters: 4 },
-  // ── New Testament ──
-  { id: 47, name: "Matthew", chapters: 28 },
-  { id: 48, name: "Mark", chapters: 16 },
-  { id: 49, name: "Luke", chapters: 24 },
-  { id: 50, name: "John", chapters: 21 },
-  { id: 51, name: "Acts", chapters: 28 },
-  { id: 52, name: "Romans", chapters: 16 },
-  { id: 53, name: "1 Corinthians", chapters: 16 },
-  { id: 54, name: "2 Corinthians", chapters: 13 },
-  { id: 55, name: "Galatians", chapters: 6 },
-  { id: 56, name: "Ephesians", chapters: 6 },
-  { id: 57, name: "Philippians", chapters: 4 },
-  { id: 58, name: "Colossians", chapters: 4 },
-  { id: 59, name: "1 Thessalonians", chapters: 5 },
-  { id: 60, name: "2 Thessalonians", chapters: 3 },
-  { id: 61, name: "1 Timothy", chapters: 6 },
-  { id: 62, name: "2 Timothy", chapters: 4 },
-  { id: 63, name: "Titus", chapters: 3 },
-  { id: 64, name: "Philemon", chapters: 1 },
-  { id: 65, name: "Hebrews", chapters: 13 },
-  { id: 66, name: "James", chapters: 5 },
-  { id: 67, name: "1 Peter", chapters: 5 },
-  { id: 68, name: "2 Peter", chapters: 3 },
-  { id: 69, name: "1 John", chapters: 5 },
-  { id: 70, name: "2 John", chapters: 1 },
-  { id: 71, name: "3 John", chapters: 1 },
-  { id: 72, name: "Jude", chapters: 1 },
-  { id: 73, name: "Revelation", chapters: 22 },
-];
-
-interface RawVerse {
+interface Verse {
   book: string;
   chapter: number;
   verse: number;
   text: string;
 }
+interface EmbeddedVerse extends Verse { embedding: number[] }
 
-async function fetchChapter(
-  bookId: number,
-  chapter: number
-): Promise<{ verse: number; text: string }[]> {
-  const url = `https://bolls.life/get-chapter/DRA/${bookId}/${chapter}/`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch book ${bookId} ch ${chapter}: ${res.status}`);
-  const data = await res.json();
-  return data.map((v: any) => ({
-    verse: v.verse,
-    text: String(v.text).trim(),
-  }));
+const SOURCE_SHA256 = "96282bfa7c89a74680cea66fe873aafa5e7cd446407f0ff2531a723e19eee2c2";
+const BATCH_SIZE = 256;
+const MODEL = "text-embedding-3-small";
+const cacheDirectory = resolve(".cache/bible");
+
+function validEmbedding(value: unknown): value is number[] {
+  return Array.isArray(value) && value.length === 1536 && value.every(Number.isFinite);
 }
 
-async function generateEmbeddings(texts: string[]): Promise<number[][]> {
-  const res = await fetch("https://api.openai.com/v1/embeddings", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "text-embedding-3-small",
-      input: texts,
-    }),
-  });
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`OpenAI embedding error: ${err}`);
+async function loadVerses(): Promise<Verse[]> {
+  const source = await readFile(resolve("data/douay-rheims-1899.txt"));
+  if (createHash("sha256").update(source).digest("hex") !== SOURCE_SHA256) {
+    throw new Error("Bible source checksum mismatch; verify the source before importing.");
   }
-
-  const data = await res.json();
-  return data.data
-    .sort((a: any, b: any) => a.index - b.index)
-    .map((d: any) => d.embedding);
+  const books = new Map(BIBLE_BOOKS.map((book) => [book.sourceCode, book]));
+  const seen = new Set<string>();
+  const chapters = new Set<string>();
+  const verses: Verse[] = [];
+  for (const line of source.toString("utf8").replace(/^\uFEFF/, "").trim().split(/\r?\n/)) {
+    const match = /^(\w+) (\d+):(\d+) (.+)$/.exec(line);
+    if (!match) throw new Error(`Malformed source line: ${line.slice(0, 60)}`);
+    const [, code, chapterRaw, verseRaw, text] = match;
+    const book = books.get(code);
+    const chapter = Number(chapterRaw);
+    const verse = Number(verseRaw);
+    if (!book || chapter < 1 || chapter > book.chapters || verse < 1 || !text.trim()) {
+      throw new Error(`Invalid reference: ${code} ${chapter}:${verse}`);
+    }
+    const key = `${code}:${chapter}:${verse}`;
+    if (seen.has(key)) throw new Error(`Duplicate reference: ${key}`);
+    seen.add(key);
+    chapters.add(`${code}:${chapter}`);
+    verses.push({ book: book.name, chapter, verse, text });
+  }
+  for (const book of BIBLE_BOOKS) {
+    for (let chapter = 1; chapter <= book.chapters; chapter++) {
+      if (!chapters.has(`${book.sourceCode}:${chapter}`)) {
+        throw new Error(`Missing chapter: ${book.name} ${chapter}`);
+      }
+    }
+  }
+  if (verses.length !== 35811 || books.size !== 73) throw new Error("Incomplete Catholic canon");
+  console.log(`Validated ${verses.length} verses, ${chapters.size} chapters, 73 books, and source checksum.`);
+  return verses;
 }
 
-async function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+async function embedBatch(batch: Verse[], index: number, apiKey: string): Promise<EmbeddedVerse[]> {
+  const input = batch.map((v) => `${v.book} ${v.chapter}:${v.verse} - ${v.text}`);
+  const digest = createHash("sha256").update(JSON.stringify({ model: MODEL, input })).digest("hex");
+  const cachePath = resolve(cacheDirectory, `${digest}.json`);
+  try {
+    const cached: unknown = JSON.parse(await readFile(cachePath, "utf8"));
+    if (Array.isArray(cached) && cached.length === batch.length && cached.every(validEmbedding)) {
+      return batch.map((verse, i) => ({ ...verse, embedding: cached[i] }));
+    }
+  } catch (error) {
+    if (!(error instanceof Error)) throw error;
+    // A missing or interrupted cache entry can be regenerated safely.
+  }
+  if (!apiKey) throw new Error("Set OPENAI_API_KEY to generate uncached search embeddings.");
+  for (let attempt = 0; attempt < 6; attempt++) {
+    const response = await fetch("https://api.openai.com/v1/embeddings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({ model: MODEL, input }),
+      signal: AbortSignal.timeout(120_000),
+    });
+    if (!response.ok) {
+      if ((response.status === 429 || response.status >= 500) && attempt < 5) {
+        await new Promise((done) => setTimeout(done, Math.min(2000 * 2 ** attempt, 30000)));
+        continue;
+      }
+      throw new Error(`Embedding batch ${index + 1} failed (HTTP ${response.status}). No import performed.`);
+    }
+    const data = await response.json() as { data: { index: number; embedding: number[] }[] };
+    const ordered = [...data.data].sort((a, b) => a.index - b.index);
+    if (ordered.length !== batch.length || ordered.some((row, i) => row.index !== i || !validEmbedding(row.embedding))) {
+      throw new Error(`Invalid embedding response for batch ${index + 1}`);
+    }
+    const embeddings = ordered.map((row) => row.embedding);
+    await writeFile(`${cachePath}.tmp`, JSON.stringify(embeddings));
+    await rename(`${cachePath}.tmp`, cachePath);
+    console.log(`Prepared embedding batch ${index + 1}`);
+    return batch.map((verse, i) => ({ ...verse, embedding: embeddings[i] }));
+  }
+  throw new Error("Embedding retries exhausted");
 }
 
 async function main() {
-  console.log("Starting Douay-Rheims (Catholic canon) seeding...\n");
-
-  // Step 1: Download all books chapter by chapter
-  const allVerses: RawVerse[] = [];
-
-  for (const book of BOOKS) {
-    process.stdout.write(`Downloading ${book.name}...`);
-    let bookVerseCount = 0;
-
-    for (let ch = 1; ch <= book.chapters; ch++) {
-      try {
-        const verses = await fetchChapter(book.id, ch);
-        for (const v of verses) {
-          if (v.text) {
-            allVerses.push({
-              book: book.name,
-              chapter: ch,
-              verse: v.verse,
-              text: v.text,
-            });
-            bookVerseCount++;
-          }
-        }
-      } catch (err: any) {
-        console.log(` (error ch ${ch}: ${err.message})`);
-      }
-      // Rate limit: small delay between chapter fetches
-      await sleep(100);
+  const verses = await loadVerses();
+  if (process.argv.includes("--validate-only")) return;
+  const apiKey = process.env.OPENAI_API_KEY ?? "";
+  await mkdir(cacheDirectory, { recursive: true });
+  const batches = Array.from({ length: Math.ceil(verses.length / BATCH_SIZE) }, (_, i) =>
+    verses.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE));
+  const results: EmbeddedVerse[][] = new Array(batches.length);
+  let nextBatch = 0;
+  await Promise.all(Array.from({ length: 4 }, async () => {
+    while (nextBatch < batches.length) {
+      const index = nextBatch++;
+      results[index] = await embedBatch(batches[index], index, apiKey);
     }
-
-    console.log(` done (${book.chapters} chapters, ${bookVerseCount} verses)`);
+  }));
+  const outputPath = resolve(cacheDirectory, "douay-rheims.jsonl");
+  // Publish the import file only after every batch succeeded. Never skip failed batches.
+  const output = await open(`${outputPath}.tmp`, "w");
+  try {
+    for (const batch of results) {
+      await output.writeFile(batch.map((v) => JSON.stringify(v)).join("\n") + "\n");
+    }
+    await output.sync();
+  } finally {
+    await output.close();
   }
-
-  console.log(`\nTotal verses collected: ${allVerses.length}\n`);
-
-  // Step 2: Generate embeddings in batches of 2000
-  const EMBED_BATCH_SIZE = 2000;
-  const allEmbeddings: number[][] = [];
-
-  for (let i = 0; i < allVerses.length; i += EMBED_BATCH_SIZE) {
-    const batch = allVerses.slice(i, i + EMBED_BATCH_SIZE);
-    const texts = batch.map(
-      (v) => `${v.book} ${v.chapter}:${v.verse} - ${v.text}`
-    );
-
-    const batchNum = Math.floor(i / EMBED_BATCH_SIZE) + 1;
-    const totalBatches = Math.ceil(allVerses.length / EMBED_BATCH_SIZE);
-    process.stdout.write(
-      `Embedding batch ${batchNum}/${totalBatches} (${batch.length} verses)...`
-    );
-
-    const embeddings = await generateEmbeddings(texts);
-    allEmbeddings.push(...embeddings);
-    console.log(" done");
-
-    if (i + EMBED_BATCH_SIZE < allVerses.length) {
-      await sleep(500);
-    }
-  }
-
-  console.log(`\nGenerated ${allEmbeddings.length} embeddings\n`);
-
-  // Step 3: Insert into Convex in batches of 50
-  const INSERT_BATCH_SIZE = 50;
-  let inserted = 0;
-
-  for (let i = 0; i < allVerses.length; i += INSERT_BATCH_SIZE) {
-    const batch = allVerses.slice(i, i + INSERT_BATCH_SIZE);
-    const batchWithEmbeddings = batch.map((v, idx) => ({
-      ...v,
-      embedding: allEmbeddings[i + idx],
-    }));
-
-    try {
-      await convex.action(api.seed.seedBatch, {
-        secret: SEED_SECRET!,
-        verses: batchWithEmbeddings,
-      });
-      inserted += batch.length;
-
-      if (inserted % 500 === 0 || inserted === allVerses.length) {
-        console.log(
-          `Inserted ${inserted}/${allVerses.length} verses (${((inserted / allVerses.length) * 100).toFixed(1)}%)`
-        );
-      }
-    } catch (err: any) {
-      console.error(
-        `\nError inserting batch at index ${i}: ${err.message}`
-      );
-      console.log("   Retrying in 2 seconds...");
-      await sleep(2000);
-      try {
-        await convex.action(api.seed.seedBatch, {
-          secret: SEED_SECRET!,
-          verses: batchWithEmbeddings,
-        });
-        inserted += batch.length;
-        console.log("   Retry succeeded");
-      } catch (retryErr: any) {
-        console.error(`   Retry failed: ${retryErr.message}`);
-        console.error("   Skipping batch and continuing...");
-      }
-    }
-
-    if (i + INSERT_BATCH_SIZE < allVerses.length) {
-      await sleep(50);
-    }
-  }
-
-  console.log(`\nSeeding complete! Inserted ${inserted} verses.`);
+  await rename(`${outputPath}.tmp`, outputPath);
+  console.log(`Complete import ready: ${outputPath}`);
+  console.log("Back up the target deployment, then replace only its Bible table:");
+  console.log("npx convex import --table bibleVerses --replace .cache/bible/douay-rheims.jsonl");
 }
 
-main().catch((err) => {
-  console.error("Fatal error:", err);
-  process.exit(1);
+main().catch((error: unknown) => {
+  console.error(error instanceof Error ? error.message : "Bible preparation failed");
+  process.exitCode = 1;
 });
