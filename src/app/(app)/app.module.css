@@ -1404,6 +1404,12 @@
   color: var(--text-primary);
   outline: none;
   padding: 8px 0;
+  line-height: 1.45;
+  resize: none;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+  height: calc(1.45em + 16px);
 }
 
 .textInput::placeholder {
@@ -1641,9 +1647,43 @@
     display: none;
   }
 
+  /* Suggestion prompts take the whole screen on a phone */
+  .suggestedContainer,
+  .welcomeDivider {
+    display: none;
+  }
+
+  .welcomeCard {
+    padding: 1.5rem 0.25rem 0.5rem;
+  }
+
+  .welcomeText {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+  }
+
   /* Footer & input adjustments */
   .footerArea {
-    padding: 0 0.75rem 1rem;
+    padding: 0 0.75rem calc(0.75rem + env(safe-area-inset-bottom));
+  }
+
+  .inputRibbon {
+    align-items: flex-end;
+    border-radius: 1.35rem;
+    padding: 6px 6px 6px 14px;
+  }
+
+  .textInput {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    height: auto;
+    max-height: 8.5rem;
+    font-size: 1rem;
+  }
+
+  .msgActions {
+    opacity: 1;
   }
 
   .chatScrollArea {

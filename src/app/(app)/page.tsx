@@ -37,7 +37,32 @@ export default function StudyPage() {
   const [editText, setEditText] = useState("");
   const [regeneratingMsgId, setRegeneratingMsgId] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const composerRef = useRef<HTMLTextAreaElement | null>(null);
   const creatingRef = useRef(false);
+
+  const growComposer = useCallback(() => {
+    const el = composerRef.current;
+    if (!el) return;
+    const mobile = window.matchMedia("(max-width: 768px)").matches;
+    if (!mobile) {
+      el.style.height = "";
+      el.scrollLeft = el.scrollWidth;
+      return;
+    }
+    el.style.height = "0px";
+    el.style.height = `${el.scrollHeight}px`;
+  }, []);
+
+  useEffect(() => {
+    growComposer();
+  }, [inputText, growComposer]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const onChange = () => growComposer();
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [growComposer]);
 
   function copyToClipboard(text: string, msgId: string) {
     navigator.clipboard.writeText(text).then(() => {
@@ -546,10 +571,20 @@ export default function StudyPage() {
             submitChat(inputText);
           }}
         >
-          <input
-            type="text"
+          <textarea
+            ref={composerRef}
+            rows={1}
             value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
+            onChange={(e) => {
+              setInputText(e.target.value);
+              growComposer();
+            }}
+            onKeyDown={(e) => {
+              if (e.key !== "Enter" || e.shiftKey || e.nativeEvent.isComposing) return;
+              if (window.matchMedia("(max-width: 768px)").matches) return;
+              e.preventDefault();
+              submitChat(inputText);
+            }}
             placeholder="Ask about scripture, theology, or Catholic teaching..."
             className={styles.textInput}
             disabled={isTyping}
